@@ -4,8 +4,6 @@
 
 </div>
 
----
-
 ## 🛠 Technologies
 
 <div align="center">
@@ -16,7 +14,6 @@
 
 </div>
 
----
 
 ## 👨‍🎓 Étudiants
 
