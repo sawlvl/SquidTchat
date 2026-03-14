@@ -36,7 +36,7 @@
     <td align="center">
       <a href="https://github.com/raphaelmariet">
         <img src="https://github.com/raphaelmariet.png" width="100px;" alt="raphaelmariet"/><br />
-        <sub><b>Raphaël</b></sub>
+        <sub><b>Raphael</b></sub>
       </a>
     </td>
   </tr>
