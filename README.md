@@ -5,7 +5,6 @@
 </div>
 
 ## 🛠 Technologies
-
 <div align="center">
 
 | 🖥 Frontend | ⚙️ Backend | 🔀 Versionnage | 🖊️ IDE | 🪟 OS de développement |
@@ -14,11 +13,26 @@
 
 </div>
 
+## 📁 Structure du projet
+
+    SquidTchat/
+    ├── client/              # Frontend (HTML, CSS, JavaScript)
+    │   ├── css/             # Feuilles de style (.css)
+    │   ├── font/            # Polices d'écriture
+    │   ├── img/             # Images et icônes
+    │   ├── javascript/      # Scripts JavaScript (.js)
+    │   └── pages/           # Pages HTML (.html)
+    │
+    ├── server/              # Backend (C++/Qt)
+    │   ├── src/             # Code source C++ (.cpp, .h, .pro)
+    │   └── database/        # Base de données SQLite (.db)
+    │
+    ├── docs/                # Documentation du projet (.pdf)
+    ├── tasks/               # Journaux d'activité individuels (.xlsx)
+    ├── .gitignore
+    └── README.md
 
 ## 👨‍🎓 Étudiants
-
-<div align="center">
-
 <table>
   <tr>
     <td align="center">
@@ -42,12 +56,8 @@
   </tr>
 </table>
 
-</div>
-
 ---
 
 <div align="center">
-
 2025 — 2026 · Groupe 8 · CIEL 1 · Campus St Félix-La Salle, Nantes
-
 </div>

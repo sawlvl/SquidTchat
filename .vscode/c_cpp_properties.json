@@ -1,5 +1,5 @@
 // Ce fichier indique à VS Code où trouver les headers Qt pour éviter les erreurs rouges. Il ne compile pas le code.
-
+// ⚠️ Chemins configurés pour Windows avec Qt 6.10.1 — à adapter sur Linux/Mac
 {
   "configurations": [
     {
@@ -9,7 +9,8 @@
         "C:/Qt/6.10.1/mingw_64/include",
         "C:/Qt/6.10.1/mingw_64/include/QtCore",
         "C:/Qt/6.10.1/mingw_64/include/QtNetwork",
-        "C:/Qt/6.10.1/mingw_64/include/QtWebSockets"
+        "C:/Qt/6.10.1/mingw_64/include/QtWidgets",
+        "C:/Qt/6.10.2/mingw_64/include/QtWebSockets"
       ],
       "defines": [
         "_DEBUG",
