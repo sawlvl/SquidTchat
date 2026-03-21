@@ -9,3 +9,5 @@
 
 
 #endif // SERVER_H
+
+bool pseudo_autorise(std::string username);
