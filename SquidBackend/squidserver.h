@@ -16,6 +16,7 @@ public:
     explicit SquidServer(QObject *parent = nullptr);
     void start_SquidServer (int porte);
 private:
+    void sortir_attente (QString User_name);
     QWebSocketServer *m_pserver;
     Squidcien_session *m_pnewclient;
     int porte;

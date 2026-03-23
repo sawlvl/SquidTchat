@@ -33,21 +33,28 @@ void Squidcien_session::onMessageReceived(const QString &message)
 
         QString type = root["type"].toString();
 
-        //gestion de nouvaux ajoute pseudo
+        // oute pseudo
         if (root.contains("payload") && root["payload"].isObject()) {
             QJsonObject payload = root["payload"].toObject();
 
             // 4. Extraction du pseudo final
             QString pseudo = payload["pseudo"].toString();
 
-            qDebug() << "Nouvelle tentative d'inscription pour :" << pseudo;
 
+            if ( pseudo_autorise(pseudo)){
+            qDebug() << "Nouvelle tentative d'inscription pour :" << pseudo;
             // C'est ici que tu appuies sur le bouton "Valider"
             m_User_name=pseudo;
             m_autentifier=true;
+            emit signal_autentifier(m_User_name);
+        }else {
+            reponc="Erreur : Le nom d'utilsatuer n'est pas au norme de la platforme";
+
+
         }
-    }
+        }}
     // a re fair propore dans une focntion sendError
+    qDebug() << reponc ;
     if (reponc.contains("Erreur")){
         QString now = QDateTime::currentDateTime().toString(Qt::ISODate);
 
@@ -59,7 +66,7 @@ void Squidcien_session::onMessageReceived(const QString &message)
 
     }else{
     //fin trantement JSON
-    sendMessage(message);
+    sendMessage("salut tous vas bien");
     }
     //fonction de RAHAEL
 }
@@ -72,6 +79,21 @@ void Squidcien_session::sendMessage(const QString &message)
     } else {
         qDebug() << "Erreur : Impossible d'envoyer le message, socket invalide ou déconnecté.";
     }
+}
+
+
+bool Squidcien_session::pseudo_autorise(const QString pseudo) {
+
+    const std::vector<QString> interdits = {"admin", "root", "moderateur"}; // Création de la liste interdite
+
+    for (const QString& mot : interdits) { // Comparaison : pseudo / liste interdite
+
+        if (pseudo == mot) return false;
+
+    } // Si la boucle se termine sans correspondance, le pseudo est accepté
+
+    return true;
+
 }
 
 

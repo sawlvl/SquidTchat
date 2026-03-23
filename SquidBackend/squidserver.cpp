@@ -34,9 +34,12 @@ QWebSocket *pSocket = m_pserver->nextPendingConnection();
     if (pSocket){
     qDebug() << "nouvaux Squid Client";
     m_pnewclient = new Squidcien_session(pSocket);
+    connect(m_pnewclient,&Squidcien_session::signal_autentifier,this,&sortir_attente);
     User_No_autentifier.append(m_pnewclient);
     qDebug() << "Le nouvaux est passer dans la fille d'attant";
     }
 }
 
-
+void SquidServer::sortir_attente (QString User_name){
+    qDebug() <<  User_name;
+}

@@ -17,17 +17,21 @@ class Squidcien_session : public QObject
 
 public:
     explicit Squidcien_session(QWebSocket *socket, QObject *parent = nullptr);
-
+    bool pseudo_autorise(const QString pseudo);
     void setUser_name(QString User_name);
     void add_MP_in_Histroy(QString frome_User_name,QString message);
     void sendMessage(const QString &message);
     void get_autentifier();
+signals:
+    void signal_autentifier(QString user_name );
 private:
     bool m_autentifier;
     QString m_User_name;
     QWebSocket *m_pclient;
     //   Username Liste_message
     QMap <QString,QStringList> m_MP_histroy;
+
+
 private slots:
         void onMessageReceived(const QString &message);
 
