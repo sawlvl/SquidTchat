@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 # ============================================================
 
 # Copie le code source dans le conteneur
-COPY server/src/ /app/
+COPY SquidBackend/ /app/
 
 # Se place dans le dossier de travail
 WORKDIR /app
@@ -32,7 +32,7 @@ WORKDIR /app
 RUN qmake6 SquidTchat.pro && make
 
 # Expose le port WebSocket
-EXPOSE 8080
+EXPOSE 1234
 
 # Lance le serveur au démarrage
 CMD ["./SquidTchat"]

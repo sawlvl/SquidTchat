@@ -55,7 +55,12 @@ body {
     padding: 10px 15px;
     border-radius: 10px;
     border: none;
-    background-color: #2a2f55;
+    background-color: red;
     cursor: pointer;
+}
+
+.btn img {
+    height: 10px;
+    width: auto;
 }
 

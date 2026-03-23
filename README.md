@@ -23,9 +23,9 @@
     │   ├── javascript/      # Scripts JavaScript (.js)
     │   └── pages/           # Pages HTML (.html)
     │
-    ├── server/              # Backend (C++/Qt)
-    │   ├── src/             # Code source C++ (.cpp, .h, .pro)
-    │   └── database/        # Base de données SQLite (.db)
+    ├── SquidBackend/              # Backend (C++/Qt)
+    │                              # Code source C++ (.cpp, .h, .pro)
+    │
     │
     ├── docker/              # Configuration Docker (Dockerfile, .yml)
     ├── docs/                # Documentation du projet (.pdf)
