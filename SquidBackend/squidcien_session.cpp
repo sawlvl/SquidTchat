@@ -58,7 +58,7 @@ void Squidcien_session::onMessageReceived(const QString &message)
         QString now = QDateTime::currentDateTime().toString(Qt::ISODate);
 
         QString type = "auth/ack";
-        QString message = sendError(type,reponc);
+        QString message = sendError(reponc,type);
 
         sendMessage(message);
 
@@ -94,19 +94,16 @@ bool Squidcien_session::pseudo_autorise(const QString pseudo) {
 
 }
 
-QString Squidcien_session::sendError(const QString &source_error,const QString &type ) {
+QString Squidcien_session::sendError(const QString &source_error, const QString &type) {
+    QJsonObject payload;
+    payload["status"] = "error";
+    payload["reason"] = source_error;
 
-    QJsonObject racine; // Création du bloc JSON "racine"
-    racine["type"] = type; //création de la variable type dans racine
-    racine["date"] = QDateTime::currentDateTime().toString(Qt::ISODate); //création de la variable date dans racine
+    QJsonObject racine;
+    racine["type"] = type;
+    racine["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+    racine["payload"] = payload;
 
-    QJsonObject payload; // Création du bloc JSON "payload"
-    payload["status"] = "error"; //création de la variable statut dans payload
-    payload["source"] = source_error; //On attrbut le pseudo invalide taper comme pseudo de Erreur_pseudo()
-
-    //Insertion du bloc payload dans le bloc racine
-    racine["payload"] = payload; // à toujours faire après l'avoir remplie
-    QJsonDocument doc(racine); //Création du conteneur du bloc racine
-    return doc.toJson(QJsonDocument::Compact); //Formatage compact pour fluidifier le programme
-
+    QJsonDocument doc(racine);
+    return doc.toJson(QJsonDocument::Indented); // ← ici
 }
