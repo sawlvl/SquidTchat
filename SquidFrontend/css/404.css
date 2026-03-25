@@ -1,0 +1,59 @@
+* {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #2a2f55;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.cadre {
+    border-radius: 30px;
+    background-color: #545eab;
+    width: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 35px 30px;
+}
+
+.cadre img.logo {
+    height: 130px;
+    width: auto;
+    margin-bottom: 5px;
+}
+
+.cadre p {
+    color: white;
+    font-size: 18px;
+}
+
+.cadre p:first-of-type {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.cadre button.retour-btn {
+    background-color: #2a2f55;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 35px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: opacity 0.2s;
+}
+
+.cadre button.retour-btn:hover {
+    opacity: 0.7;
+}

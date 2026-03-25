@@ -1,0 +1,8 @@
+#Bloque le push sur github des dossier commencent par build
+build*/ 
+
+#Bloque le push sur github des fichiers avec l'extension .pro.user
+*.pro.user
+
+#Bloque le push sur github des dossier .qtcreator
+.qtcreator/
