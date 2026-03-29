@@ -19,11 +19,13 @@ signals:
     void signal_user_name_status(bool status ,QString User_name);
 private:
     void user_name_already_use (QString User_name);
+    void brodcast_message_f(QString message_f);
     QWebSocketServer *m_pserver;
     Squidcien_session *m_pnewclient;
     int porte;
     QMap<QString, Squidcien_session*> User_autentifier;
     QList<Squidcien_session*> User_No_autentifier;
+
 private slots:
     void New_Connection();
 

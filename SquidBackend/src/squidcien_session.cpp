@@ -38,104 +38,115 @@ void Squidcien_session::onMessageReceived(const QString &message)
         // oute pseudo
         if (root.contains("payload") && root["payload"].isObject()) {
             QJsonObject payload = root["payload"].toObject();
+            //  Type chec
+            if(type == "auth/register"){
+                pseudo = payload["pseudo"].toString();
 
-            // 4. Extraction du pseudo final
-            pseudo = payload["pseudo"].toString();
+                if (pseudo_autorise(pseudo)) {
+                    // SUCCÈS : Le pseudo est bon, on valide l'authentification.
+                    qDebug() << "Nouvelle tentative d'inscription acceptee pour :" << pseudo;
+                    m_User_name = pseudo;
+                    emit signal_autentifier(m_User_name);
 
+                } else {
+                    // ÉCHEC : Le pseudo est banni (ex: admin, root). On le rejette.
+                    QString reponc = "Erreur : Le nom d'utilisateur n'est pas aux normes de la plateforme";
+                    QString type_ack = "auth/ack"; // Renommé pour ne pas écraser la variable 'type' parente
+                    QString message = sendError(reponc, type_ack);
+                    sendMessage(message);
+                }
+            }
 
-            if ( pseudo_autorise(pseudo)){
-            qDebug() << "Nouvelle tentative d'inscription pour :" << pseudo;
-        }else {
-            reponc="Erreur : Le nom d'utilsatuer n'est pas au norme de la platforme";
+            if(type == "forum/send"){
+                if (m_autentifier){
+                //gestion des message pour le forum
 
+                QString message_f = payload["content"].toString();
+                //Fonction de raphaelle add_username_for_f
 
+                //QString message_f_from = add_username_for_f(m_User_name,message_f)
+                QString message_f_from = QString("{\"type\":\"forum/send\",\"timestamp\":\"2026-03-20T14:35:00Z\",\"payload\":{\"from\":\"michel\",\"content\":\"%1\"}}").arg(message_f);
+
+                emit signal_message_fro_forum(message_f_from);
+                }else{
+                    QString reponc = "Erreur : autentifier vous au avant";
+                    QString type_ack = "forum/send";
+                    QString message = sendError(reponc, type_ack);
+                    sendMessage(message);
+                }
+            }
         }
-        }}
-    // a re fair propore dans une focntion sendError
-    if (reponc.contains("Erreur")){
-        QString now = QDateTime::currentDateTime().toString(Qt::ISODate);
-
-        QString type = "auth/ack";
-        QString message = sendError(reponc,type);
-
-        sendMessage(message);
-
-    }else{
-    //fin trantement JSON
-    // C'est ici que tu appuies sur le bouton "Valider"
-    m_User_name=pseudo;
-    emit signal_autentifier(m_User_name);
     }
-    //fonction de RAHAEL
 }
 
-void Squidcien_session::user_data_update(bool server_status,QString User_name){
-    if (User_name==m_User_name && m_autentifier==false ){
-    if(server_status){
-            //traiter erreur
-            QString reponc="Erreur : le nom d'utilisateur est deja utiliser";
-            QString type = "auth/ack";
-            QString message = sendError(reponc,type);
-            sendMessage(message);
-            qDebug() << "L'utilisateur " << m_User_name << "et rejeter car le nom d'utilisateur est deja utiliser ";
+
+    void Squidcien_session::user_data_update(bool server_status,QString User_name){
+        if (User_name==m_User_name && m_autentifier==false ){
+            if(server_status){
+                //traiter erreur
+                QString reponc="Erreur : le nom d'utilisateur est deja utiliser";
+                QString type = "auth/ack";
+                QString message = sendError(reponc,type);
+                sendMessage(message);
+                qDebug() << "L'utilisateur " << m_User_name << "et rejeter car le nom d'utilisateur est deja utiliser ";
 
 
-    }else{
+            }else{
 
-        m_autentifier=true;
-        qDebug() << "L'utilisateur " << m_User_name << " est désormais authentifié";
+                m_autentifier=true;
+                qDebug() << "L'utilisateur " << m_User_name << " est authentifier";
+                QJsonObject payload;
+                payload["status"] = "ok";
+                payload["pseudo"] = m_User_name;
+
+                QJsonObject root;
+                root["type"] = "auth/ack";
+                root["timestamp"] = "2026-03-20T14:32:01Z"; // a a changer avec le vrais temps
+                root["payload"] = payload;
+
+                QJsonDocument doc(root);
+                QString jsonString = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
+
+                sendMessage(jsonString);
+            }
+        }
+    }
+
+    void Squidcien_session::sendMessage(const QString &message)
+    {
+        // On vérifie que le pointeur n'est pas nulptr == conextion fermer
+        if (m_pclient && m_pclient->isValid()) {
+            m_pclient->sendTextMessage(message);
+        } else {
+            qDebug() << "Erreur : Impossible d'envoyer le message, socket invalide ou déconnecté.";
+        }
+    }
+
+
+    bool Squidcien_session::pseudo_autorise(const QString pseudo) {
+
+        const std::vector<QString> interdits = {"admin", "root", "moderateur"};  // Création de la liste interdite
+
+        for (const QString& mot : interdits) { // Comparaison : pseudo / liste interdite
+
+            if (pseudo == mot) return false;
+
+        } // Si la boucle se termine sans correspondance, le pseudo est accepté
+
+        return true;
+
+    }
+
+    QString Squidcien_session::sendError(const QString &source_error, const QString &type) {
         QJsonObject payload;
-        payload["status"] = "ok";
-        payload["pseudo"] = m_User_name;
+        payload["status"] = "error";
+        payload["reason"] = source_error;
 
-        QJsonObject root;
-        root["type"] = "auth/ack";
-        root["timestamp"] = "2026-03-20T14:32:01Z"; // Idéalement : QDateTime::currentDateTime().toString(Qt::ISODate)
-        root["payload"] = payload;
+        QJsonObject racine;
+        racine["type"] = type;
+        racine["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+        racine["payload"] = payload;
 
-        QJsonDocument doc(root);
-        QString jsonString = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
-
-        sendMessage(jsonString);
+        QJsonDocument doc(racine);
+        return doc.toJson(QJsonDocument::Indented);
     }
-    }
-}
-
-void Squidcien_session::sendMessage(const QString &message)
-{
-    // On vérifie que le pointeur n'est pas nulptr == conextion fermer
-    if (m_pclient && m_pclient->isValid()) {
-        m_pclient->sendTextMessage(message);
-    } else {
-        qDebug() << "Erreur : Impossible d'envoyer le message, socket invalide ou déconnecté.";
-    }
-}
-
-
-bool Squidcien_session::pseudo_autorise(const QString pseudo) {
-
-    const std::vector<QString> interdits = {"admin", "root", "moderateur"};  // Création de la liste interdite
-
-    for (const QString& mot : interdits) { // Comparaison : pseudo / liste interdite
-
-        if (pseudo == mot) return false;
-
-    } // Si la boucle se termine sans correspondance, le pseudo est accepté
-
-    return true;
-
-}
-
-QString Squidcien_session::sendError(const QString &source_error, const QString &type) {
-    QJsonObject payload;
-    payload["status"] = "error";
-    payload["reason"] = source_error;
-
-    QJsonObject racine;
-    racine["type"] = type;
-    racine["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
-    racine["payload"] = payload;
-
-    QJsonDocument doc(racine);
-    return doc.toJson(QJsonDocument::Indented); // ← ici
-}

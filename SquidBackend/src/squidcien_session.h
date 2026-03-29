@@ -25,6 +25,7 @@ public:
     QString sendError(const QString &source_error, const QString &type);
 signals:
     void signal_autentifier(QString user_name );
+    void signal_message_fro_forum(QString message_f);
 private:
     bool m_autentifier;
     QString m_User_name;
