@@ -64,10 +64,33 @@ void Squidcien_session::onMessageReceived(const QString &message)
                 QString message_f = payload["content"].toString();
                 //Fonction de raphaelle add_username_for_f
 
-                //QString message_f_from = add_username_for_f(m_User_name,message_f)
-                QString message_f_from = QString("{\"type\":\"forum/send\",\"timestamp\":\"2026-03-20T14:35:00Z\",\"payload\":{\"from\":\"michel\",\"content\":\"%1\"}}").arg(message_f);
+                QString message_f_from = QJsonDocument(QJsonObject{{"type","forum/send"}
+                ,{"timestamp",QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
+                {"payload",QJsonObject{{"from",m_User_name},{"content",message_f}}}})
+                .toJson(QJsonDocument::Compact);
+
 
                 emit signal_message_fro_forum(message_f_from);
+                }else{
+                    QString reponc = "Erreur : autentifier vous au avant";
+                    QString type_ack = "forum/send";
+                    QString message = sendError(reponc, type_ack);
+                    sendMessage(message);
+                }
+            }
+            if (type == "mp/send"){
+
+                if (m_autentifier){
+
+                QString message_mp=payload["content"].toString();
+                QString user_name_mptarget=payload["to"].toString();
+
+                QString message_mp_from = QJsonDocument(QJsonObject{{"type","mp/message"},
+                {"timestamp",QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
+                {"payload",QJsonObject{{"from",m_User_name},{"content",message_mp}}}}).toJson(QJsonDocument::Compact);
+
+                emit signal_message_for_mp(message_mp_from,user_name_mptarget);
+
                 }else{
                     QString reponc = "Erreur : autentifier vous au avant";
                     QString type_ack = "forum/send";

@@ -17,9 +17,12 @@ public:
     void start_SquidServer (int porte);
 signals:
     void signal_user_name_status(bool status ,QString User_name);
+    //void signal_message_mp()
 private:
     void user_name_already_use (QString User_name);
     void brodcast_message_f(QString message_f);
+    void mp_message(QString message_mp,QString user_name_mptarget);
+
     QWebSocketServer *m_pserver;
     Squidcien_session *m_pnewclient;
     int porte;

@@ -44,6 +44,8 @@ QWebSocket *pSocket = m_pserver->nextPendingConnection();
     // connect pour les message pour le forum général
     connect(m_pnewclient,&Squidcien_session::signal_message_fro_forum,this,&SquidServer::brodcast_message_f);
 
+    // connect pour les message pour les mp
+    connect(m_pnewclient,&Squidcien_session::signal_message_for_mp,this,&SquidServer::mp_message);
 
     User_No_autentifier.append(m_pnewclient);
     qDebug() << "Le nouvaux est passer dans la fille d'attant";
@@ -84,6 +86,32 @@ void SquidServer::brodcast_message_f(QString message_f)
         // On vérifie toujours que le pointeur n'est pas nul (sécurité enfant)
         if (session) {
             session->sendMessage(message_f);
+        }
+    }
+}
+
+void SquidServer::mp_message(QString message_mp, QString user_name_mptarget)
+{
+    // 2. Recherche optimisée (ne parcourt l'arbre qu'une seule fois)
+    auto it = User_autentifier.constFind(user_name_mptarget);
+
+    // 3. Vérification de l'existence
+    if (it != User_autentifier.constEnd()) {
+        // Succès : on récupère le pointeur
+        Squidcien_session* session = it.value();
+
+        // Vérification point n'est pas a nul PTR
+        if (session) {
+            session->sendMessage(message_mp);
+        }
+    } else {
+        // Échec : l'user n'est pas la
+        Squidcien_session* client_actuel = qobject_cast<Squidcien_session*>(sender());
+        // Vérification point n'est pas a nul PTR
+        if (client_actuel) {
+        QString reponc = "Erreur : utilisateur non trouver";
+        QString type_ack = "mp/error";
+        client_actuel->sendMessage(client_actuel->sendError(reponc,type_ack));
         }
     }
 }

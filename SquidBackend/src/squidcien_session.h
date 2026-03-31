@@ -26,6 +26,7 @@ public:
 signals:
     void signal_autentifier(QString user_name );
     void signal_message_fro_forum(QString message_f);
+    void signal_message_for_mp (QString message_mp,QString user_name_mptarget);
 private:
     bool m_autentifier;
     QString m_User_name;
