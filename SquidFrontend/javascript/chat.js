@@ -1,6 +1,8 @@
-/**
- * @author W.Sanquer
- */
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
 
 function envoyerMessage() {
     const input = document.querySelector('.saisie');

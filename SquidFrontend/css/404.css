@@ -1,3 +1,12 @@
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
+
+/* ===================================================
+    Les reglages de la page
+   =================================================== */
 * {
     text-decoration: none;
     margin: 0;
@@ -14,6 +23,9 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* ===================================================
+    Bloc central de la page
+   =================================================== */
 .cadre {
     border-radius: 30px;
     background-color: #545eab;
@@ -42,6 +54,9 @@ body {
     font-weight: bold;
 }
 
+/* ===================================================
+    Le bouton de retour a la page index.html
+   =================================================== */
 .cadre button.retour-btn {
     background-color: #2a2f55;
     color: white;

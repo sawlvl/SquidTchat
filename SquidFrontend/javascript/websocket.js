@@ -1,6 +1,8 @@
-/**
- * @author W.Sanquer
- */
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
 
 // Ouvre une connexion directe avec le serveur.
 const socket = new WebSocket("ws://10.16.26.1:1234");

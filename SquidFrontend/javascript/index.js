@@ -1,6 +1,8 @@
-/**
- * @author W.Sanquer
- */
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
 
 // On récupère le texte où l'utilisateur tape son pseudo.
 const input = document.querySelector(".pseudo");

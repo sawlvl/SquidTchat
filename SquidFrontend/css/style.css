@@ -1,10 +1,39 @@
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
+
+/* ===================================================
+    Police d'ecriture
+   =================================================== */
 @font-face {
     font-family: 'Aristotelica';
     src: url('../font/aristotelica/AristotelicaSmallCaps-Regular.ttf');
 }
 
+.login p {
+    color: white;
+    margin: 0;
+    font-family: 'Aristotelica', sans-serif;
+}
+
+.login input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 13px;
+}
+
+
+/* ===================================================
+    Les reglages de la page
+   =================================================== */
 * {
+    margin: 0;
+    padding: 0;
     text-decoration: none;
+    box-sizing: border-box;
 }
 
 body {
@@ -14,6 +43,11 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+
+/* ===================================================
+    Bloc central de la page
+   =================================================== */
 
 .login {
     border-radius: 30px;
@@ -31,20 +65,22 @@ body {
 .login img {
     height: 250px;
     width: auto;
+    margin-top: 10px;
     margin-bottom: 10px;
     align-self: center;
 }
 
-.login p {
-    color: white;
-    margin: 0;
-    font-family: Aristotelica;
-}
+
+/* ===================================================
+    Barre de saisie (Input et Boutons)
+   =================================================== */
 
 .ligne {
     display: flex;
-    gap: 10px;
+    gap: 0;
     width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
 }
 
 .login input {
@@ -55,19 +91,6 @@ body {
     border: none;
     font-size: 14px;
     outline: none;
-    transition: background 0.2s;
-    border-radius: 20px 0 0 20px;
-}
-
-.login input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 13px;
-}
-
-.login input:focus {
-    background-color: #2a2f55;
 }
 
 .login button {
@@ -79,24 +102,6 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0 18px;
-    transition: background 0.2s;
-    border-radius: 0 20px 20px 0;
-}
-
-.login button:hover {
-    background-color: #76d18b;
-}
-
-.login img {
-    margin-top: 10px;
-}
-
-.ligne {
-    display: flex;
-    gap: 0;
-    width: 100%;
-    border-radius: 20px;
-    overflow: hidden;
 }
 
 .btn img {
@@ -104,9 +109,13 @@ body {
     width: auto;
 }
 
+
+/* ===================================================
+    Message d'alerte
+   =================================================== */
 .erreur {
+    /* !important rend cette règle prioritaire sur toutes les autres. */
     color: #FF6B6B !important;
     font-size: 15px;
     margin-top: 5px;
 }
-

@@ -1,6 +1,8 @@
-/**
- * @author W.Sanquer
- */
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
 
 // Vérifie si un pseudo existe dans le stockage de la session.
 const pseudo = sessionStorage.getItem("pseudo");

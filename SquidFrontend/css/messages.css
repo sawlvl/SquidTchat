@@ -1,3 +1,12 @@
+/*****************************************************
+ * PROJECT : SquidTchat
+ * AUTHOR  : W.Sanquer
+ * DATE    : 2026
+ *****************************************************/
+
+/* ===================================================
+    Les reglages de la page
+   =================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -6,11 +15,11 @@
 }
 
 body, html {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+    height: 100%;          
+    width: 100%;           
+    overflow: hidden;       
     background-color: #2a2f55;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: sans-serif;
 }
 
 .pages {
@@ -19,80 +28,75 @@ body, html {
     width: 100vw;
 }
 
-/* --- BARRE LATÉRALE GAUCHE (.conversations) --- */
+
+/* ===================================================
+    Zone des conversations
+   =================================================== */
 .conversations {
-    width: 320px; /* Largeur de ta barre bleue */
-    background-color: #636dbe; /* Couleur de fond de ta barre */
+    width: 320px;           
+    background-color: #636dbe;
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     padding: 20px;
-    
-    /* Bords arrondis en haut ET en bas à droite */
-    border-top-right-radius: 45px;
+    border-top-right-radius: 45px;    
     border-bottom-right-radius: 45px;
 }
 
-/* --- HEADER AVEC LES BOUTONS F et + --- */
 .conv-header {
     display: flex;
-    gap: 15px;           /* Espace entre le bouton F et le bouton + */
+    gap: 15px;              
     margin-bottom: 40px; 
-    /* Décale le groupe de boutons vers la droite du cadre bleu */
-    justify-content: flex-end; 
+    justify-content: flex-end;
     padding-right: 10px; 
 }
 
-/* Style des cercles verts (Statiques, sans animation) */
 .container-btn-f, .container-btn-add {
     width: 55px;         
     height: 55px;
-    background-color: #76d18b; /* Ton vert hexa */
-    border-radius: 50%;
+    background-color: #76d18b;
+    border-radius: 50%; 
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
 }
 
-/* Style de la lettre F à l'intérieur du rond */
 .btn-f {
-    color: #636dbe;      /* Le bleu de la barre pour le contraste */
+    color: #636dbe;
     font-size: 24px;
     font-weight: bold;
 }
 
-/* Style de l'image + à l'intérieur du rond */
 .btn-add {
     width: 25px;         
     height: auto;
 }
 
-/* --- LISTE DES CONVERSATIONS --- */
 .conv-liste {
-    flex: 1;             /* Occupe tout le reste de la hauteur */
-    overflow-y: auto;    /* Scroll interne si trop de contacts */
+    flex: 1;
+    overflow-y: auto;
     padding: 10px;
 }
 
-/* --- ZONE DE DROITE (.main-content) --- */
+
+/* ===================================================
+    Zone de droite (Logo et Message d'accueil)
+   =================================================== */
+
 .main-content {
-    flex: 1;             /* Prend tout l'espace restant à droite */
+    flex: 1;        
     display: flex;
     justify-content: center; 
     align-items: center;
 }
 
-/* Zone d'attente (Logo Calmar + Texte) */
 .attente {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .attente img {
-    height: 300px;       /* Taille du logo selon ton image */
+    height: 300px;      
     width: auto;
     margin-bottom: 30px;
 }
@@ -100,13 +104,11 @@ body, html {
 .attente p {
     color: white;
     font-weight: bold;
-    font-size: 1.1rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     opacity: 0.9;
 }
 
-/* --- MASQUER LA ZONE DE MESSAGES PAR DÉFAUT --- */
 .messages {
     display: none;
 }
