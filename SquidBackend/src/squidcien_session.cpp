@@ -64,6 +64,10 @@ void Squidcien_session::onMessageReceived(const QString &message)
                 QString message_f = payload["content"].toString();
                 //Fonction de raphaelle add_username_for_f
 
+                // --- APPLICATION DU FILTRE ---
+                message_f = filtrerMessage(message_f); 
+                // -----------------------------
+
                 QString message_f_from = QJsonDocument(QJsonObject{{"type","forum/send"}
                 ,{"timestamp",QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
                 {"payload",QJsonObject{{"from",m_User_name},{"content",message_f}}}})
@@ -83,6 +87,11 @@ void Squidcien_session::onMessageReceived(const QString &message)
                 if (m_autentifier){
 
                 QString message_mp=payload["content"].toString();
+
+                // --- APPLICATION DU FILTRE ---
+                message_mp = filtrerMessage(message_mp);
+                // -----------------------------
+
                 QString user_name_mptarget=payload["to"].toString();
 
                 QString message_mp_from = QJsonDocument(QJsonObject{{"type","mp/message"},
@@ -144,7 +153,9 @@ void Squidcien_session::onMessageReceived(const QString &message)
             qDebug() << "Erreur : Impossible d'envoyer le message, socket invalide ou déconnecté.";
         }
     }
-
+// A FAIRE : 
+// - Filtre miniscule + Majuscule   (pseudo / message)
+// - Fichier texte à affecté (pseudo / message)
 
     bool Squidcien_session::pseudo_autorise(const QString pseudo) {
 
@@ -159,6 +170,26 @@ void Squidcien_session::onMessageReceived(const QString &message)
         return true;
 
     }
+
+    QString Squidcien_session::filtrerMessage(const QString &message) {
+        QString messageFiltre = message;
+
+        //Liste des mots à filtrer
+        static const QStringList insultes ={"tg", "salope","connard"}
+        
+        for (const QString &mot : insultes) 
+        {
+            QRegularExpression re("\\b" + QRegularExpression::escape(mot) + "\\b", QRegularExpression::CaseInsensitiveOption);
+        
+            QString remplacement;
+            remplacement.fill('***', mot.length());
+        
+        messageFiltre.replace(re, remplacement);
+        }
+        return messageFiltre;
+    }
+    
+
 
     QString Squidcien_session::sendError(const QString &source_error, const QString &type) {
         QJsonObject payload;
