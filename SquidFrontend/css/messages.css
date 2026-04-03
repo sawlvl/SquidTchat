@@ -5,46 +5,108 @@
     text-decoration: none;
 }
 
-body {
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
     background-color: #2a2f55;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.conversations img {
-
+.pages {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
 }
 
-.conversations a {
-    color: #2a2f55;
+/* --- BARRE LATÉRALE GAUCHE (.conversations) --- */
+.conversations {
+    width: 320px; /* Largeur de ta barre bleue */
+    background-color: #636dbe; /* Couleur de fond de ta barre */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    
+    /* Bords arrondis en haut ET en bas à droite */
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
 }
 
+/* --- HEADER AVEC LES BOUTONS F et + --- */
 .conv-header {
-
+    display: flex;
+    gap: 15px;           /* Espace entre le bouton F et le bouton + */
+    margin-bottom: 40px; 
+    /* Décale le groupe de boutons vers la droite du cadre bleu */
+    justify-content: flex-end; 
+    padding-right: 10px; 
 }
 
+/* Style des cercles verts (Statiques, sans animation) */
+.container-btn-f, .container-btn-add {
+    width: 55px;         
+    height: 55px;
+    background-color: #76d18b; /* Ton vert hexa */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Style de la lettre F à l'intérieur du rond */
+.btn-f {
+    color: #636dbe;      /* Le bleu de la barre pour le contraste */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Style de l'image + à l'intérieur du rond */
+.btn-add {
+    width: 25px;         
+    height: auto;
+}
+
+/* --- LISTE DES CONVERSATIONS --- */
 .conv-liste {
-    border-radius: 30px;
-    background-color: #636dbe;
-    height: 700px;
-    width: 250px;
+    flex: 1;             /* Occupe tout le reste de la hauteur */
+    overflow-y: auto;    /* Scroll interne si trop de contacts */
+    padding: 10px;
 }
 
-.messages {
-
+/* --- ZONE DE DROITE (.main-content) --- */
+.main-content {
+    flex: 1;             /* Prend tout l'espace restant à droite */
+    display: flex;
+    justify-content: center; 
+    align-items: center;
 }
 
+/* Zone d'attente (Logo Calmar + Texte) */
 .attente {
-
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .attente img {
-    height: 250px;
+    height: 300px;       /* Taille du logo selon ton image */
     width: auto;
+    margin-bottom: 30px;
 }
 
 .attente p {
-
     color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
 }
 
-
-
+/* --- MASQUER LA ZONE DE MESSAGES PAR DÉFAUT --- */
+.messages {
+    display: none;
+}

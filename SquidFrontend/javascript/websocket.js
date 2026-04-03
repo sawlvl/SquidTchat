@@ -3,7 +3,7 @@
  */
 
 // Ouvre une connexion directe avec le serveur.
-const socket = new WebSocket("ws://localhost:1234");
+const socket = new WebSocket("ws://10.16.26.1:1234");
 
 // Attend la connexion et envoie le pseudo au serveur pour s'authentifier.
 socket.onopen = () => {
