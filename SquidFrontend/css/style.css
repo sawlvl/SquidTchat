@@ -15,6 +15,21 @@ body {
     height: 100vh;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.Titre {
+    font-family: 'Aristotelica', sans-serif;
+    color: white;
+    font-size: 100px;
+    margin: 0;
+    text-transform: uppercase;
+}
 .login {
     border-radius: 30px;
     background-color: #545eab;

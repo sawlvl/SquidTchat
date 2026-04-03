@@ -7,17 +7,25 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="login"> 
-        <img src="img/favicon.png" alt="Logo">
-        <p>Nom d'utilisateur :</p>
+    <div class="container">
+        
+        <h1 class="Titre">SquidTchat</h1>
+        
+        <div class="login">
+            <img src="img/favicon.png" alt="Logo">
+            <p>Nom d'utilisateur :</p>
+            <div class="ligne">
+                <input type="text" class="pseudo" placeholder="Entrer votre nom d'utilisateur">
+                <a href="pages/forum.html">
+                    <button class="btn">
+                        <img src="img/Boutons/arrow_right_button.svg" alt="Fleches">
+                    </button>
+                </a>
+            </div>
 
-        <div class="ligne">
-            <input type="text" class="pseudo" placeholder="Entrer votre nom d'utilisateur">
-            <a href="pages/forum.html" class="btn">
-                <button><img src="img/Boutons/arrow_right_button.svg" alt="Fleches"></button>
-            </a>
-        </div>  
-        <p class="erreur"></p>
+            <p class="erreur"></p>
+        </div>
+
     </div>
 
     <script src="javascript/index.js"></script>
