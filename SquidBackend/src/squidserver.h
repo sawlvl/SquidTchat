@@ -7,6 +7,7 @@
 #include <QString>
 #include "squidcien_session.h"
 #include <QList>
+#include <QRegularExpression> // --- Filtre message----//
 
 
 class SquidServer : public QObject
@@ -22,6 +23,8 @@ private:
     void user_name_already_use (QString User_name);
     void brodcast_message_f(QString message_f);
     void mp_message(QString message_mp,QString user_name_mptarget);
+
+    QString filtrerMessage(const QString &message); // --- Filtre message----//
 
     QWebSocketServer *m_pserver;
     Squidcien_session *m_pnewclient;
