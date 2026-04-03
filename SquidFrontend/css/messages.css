@@ -1,3 +1,50 @@
 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     text-decoration: none;
 }
+
+body {
+    background-color: #2a2f55;
+}
+
+.conversations img {
+
+}
+
+.conversations a {
+    color: #2a2f55;
+}
+
+.conv-header {
+
+}
+
+.conv-liste {
+    border-radius: 30px;
+    background-color: #636dbe;
+    height: 700px;
+    width: 250px;
+}
+
+.messages {
+
+}
+
+.attente {
+
+}
+
+.attente img {
+    height: 250px;
+    width: auto;
+}
+
+.attente p {
+
+    color: white;
+}
+
+
+

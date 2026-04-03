@@ -1,10 +1,12 @@
 /**
  * @author W.Sanquer
  */
+
 function envoyerMessage() {
     const input = document.querySelector('.saisie');
     const texte = input.value.trim();
     if (!texte) return;
+
     // Envoie le message au serveur via WebSocket
     socket.send(JSON.stringify({
     type: "forum/send",
