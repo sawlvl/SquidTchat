@@ -34,6 +34,7 @@ Le tout propulsé par une communication WebSocket entre un frontend web et un se
 
     SquidTchat/
     ├── SquidFrontend/       # Frontend (HTML, CSS, JavaScript)
+    │   ├─config/            #Scripts de configuration (.js)
     │   ├── css/             # Feuilles de style (.css)
     │   ├── font/            # Polices d'écriture
     │   ├── img/             # Images et icônes
