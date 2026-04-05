@@ -8,7 +8,8 @@
     Ouverture de la connexion avec le serveurs
    =================================================== */
 
-const socket = new WebSocket("ws://127.0.0.1:1234");
+const wsUrl = window.SQUIDTCHAT_WS_URL || "ws://127.0.0.1:1234";
+const socket = new WebSocket(wsUrl);
 
 /* ===================================================
     Presentation aupres du serveur
@@ -57,7 +58,7 @@ socket.onmessage = (event) => {
             pseudo: reponse.payload.pseudo
         });
         sessionStorage.setItem("forum", JSON.stringify(historique));
-        if (surPageForum) afficherNotif(reponse.payload.pseudo + " a rejoint les joueurs 🟢");
+        if (surPageForum) afficherNotif(reponse.payload.pseudo + " a rejoint les joueurs");
     }
 
     // Notification de déconnexion d'un utilisateur
@@ -70,7 +71,7 @@ socket.onmessage = (event) => {
             pseudo: reponse.payload.pseudo
         });
         sessionStorage.setItem("forum", JSON.stringify(historique));
-        if (surPageForum) afficherNotif(reponse.payload.pseudo + " a été éliminé 🔴");
+        if (surPageForum) afficherNotif(reponse.payload.pseudo + " a été éliminé");
     }
 
     // Resultats de recherche d'utilisateurs
@@ -190,9 +191,9 @@ historique.forEach(msg => {
     if (msg.type === "forum/send") {
         afficherBulle(msg.from, msg.content);
     } else if (msg.type === "presence/come") {
-        afficherNotif(msg.pseudo + " a rejoint les joueurs 🟢");
+        afficherNotif(msg.pseudo + " a rejoint les joueurs");
     } else if (msg.type === "presence/left") {
-        afficherNotif(msg.pseudo + " a été éliminé 🔴");
+        afficherNotif(msg.pseudo + " a été éliminé");
     }
 });
 

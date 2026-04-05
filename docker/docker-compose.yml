@@ -13,18 +13,18 @@ services:
   # --------------------------------------------------------
   backend:
     build:
-      context: ..          # racine du projet (là où sont SquidBackend/ et SquidFrontend/)
+      context: ..
       dockerfile: docker/Dockerfile
     container_name: squidtchat-backend
     ports:
-      - "1234:1234"        # port WebSocket exposé à l'hôte
+      - "1234:1234"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/1234'"]
-      interval: 3s          # vérifie toutes les 3 secondes
+      interval: 3s
       timeout: 2s
-      retries: 10           # attend jusqu'à 30s que le backend soit prêt
-      start_period: 5s      # laisse 5s au backend pour démarrer avant de commencer
+      retries: 10
+      start_period: 5s
 
   # --------------------------------------------------------
   # Frontend : fichiers statiques servis par Nginx
@@ -33,10 +33,13 @@ services:
     image: nginx:alpine
     container_name: squidtchat-frontend
     ports:
-      - "8080:80"          # accès via http://localhost:8080
+      - "8080:80"
     volumes:
-      - ../SquidFrontend:/usr/share/nginx/html:ro
+      - ../SquidFrontend:/usr/share/nginx/html
+    environment:
+      WS_HOST: "192.168.1.36" #Choisir l'IP de deploiement du projet
+    entrypoint: /bin/sh -c "echo \"window.SQUIDTCHAT_WS_URL = 'ws://$$WS_HOST:1234';\" > /usr/share/nginx/html/config/config.js && nginx -g 'daemon off;'"
     depends_on:
       backend:
-        condition: service_healthy   # attend que le backend réponde avant de démarrer
+        condition: service_healthy
     restart: unless-stopped

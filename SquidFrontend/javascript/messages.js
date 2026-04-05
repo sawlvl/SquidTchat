@@ -79,19 +79,10 @@ inputMP.addEventListener("input", () => {
 });
 
 /* ===================================================
-    Raccourci clavier pour la touche entrer et echap
+    Raccourci clavier
    =================================================== */
 
 inputMP.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        const cible = inputMP.value.trim();
-        if (cible) {
-            ouvrirConversation(cible);
-        }
-        searchBar.style.display = "none";
-        searchResults.style.display = "none";
-        inputMP.value = "";
-    }
     if (e.key === "Escape") {
         searchBar.style.display = "none";
         searchResults.style.display = "none";

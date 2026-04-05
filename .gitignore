@@ -1,11 +1,17 @@
-#Bloque le push sur github des dossier commencent par build
+# Bloque le push sur github des dossier commencent par build
 build*/ 
 
-#Bloque le push sur github des fichiers avec l'extension .pro.user
+# Bloque le push sur github des fichiers avec l'extension .pro.user
 *.pro.user
 
-#Bloque le push sur github des dossier .qtcreator
+# Bloque le push sur github des dossier .qtcreator
 .qtcreator/
 
 # Bloque le push sur github des fichiers de log
 *.log
+
+# Bloque le push sur github des fichiers .env
+.env
+
+# Empêcher de push le dossier admin qui est dans SquidFrontend
+SquidFrontend/admin/
