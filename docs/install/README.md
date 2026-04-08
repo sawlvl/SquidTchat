@@ -17,8 +17,6 @@
 
 Version du document : 5 avril 2026
 
-Image du projet disponible ici : `SquidFrontend/img/Logos/squidtchat_attente.jpg`
-
 ## 1. Objectif du document
 
 Cette procedure explique comment installer Git, installer Docker Desktop, verifier que Docker Desktop est bien demarre, puis lancer le projet SquidTchat avec Docker sous Windows.
@@ -70,7 +68,7 @@ Cette etape est indispensable : si Docker Desktop n'est pas lance, la commande d
 
 ## 6. Recuperer le projet SquidTchat
 
-Si le projet n'est pas deja present sur la machine, il peut etre clone depuis GitHub.
+Si le projet n'est pas deja present sur la machine, il peut etre clone depuis GitHub avec le terminal.
 
 ```powershell
 git clone https://github.com/m0bley-git/SquidTchat.git
@@ -85,7 +83,7 @@ Le service `frontend` utilise une variable nommee `WS_HOST` pour construire l'UR
 
 ```yml
 environment:
-  WS_HOST: "192.168.1.36"
+  WS_HOST: "IP DE LA MACHINE"
 ```
 
 ## 8. Lancer SquidTchat avec Docker
@@ -107,7 +105,7 @@ docker compose -f docker/docker-compose.yml up -d --build
 Quand les conteneurs sont demarres, ouvrir un navigateur Web et acceder a :
 
 ```text
-http://localhost:8080
+http://ip de la machine:8080
 ```
 
 ## 10. Arreter le projet

@@ -68,30 +68,19 @@ Le tout propulsé par une communication WebSocket entre un frontend web et un se
 ## 🔧 Installation
 
 ### Prérequis
-Assurez-vous d'avoir installé sur votre machine :
 - [Git](https://git-scm.com/downloads)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) — doit être **ouvert et démarré** avant toute commande
 
-### Cloner le dépôt
+### Lancer le projet
 ```bash
 git clone https://github.com/m0bley-git/SquidTchat.git
 cd SquidTchat
+docker compose -f docker/docker-compose.yml up --build
 ```
 
-### Lancer le projet
-> ⚠️ En cours de développement — pas encore fonctionnel.
+Puis ouvrir : `http://<IP de la machine>:8080`
 
-| Action | Commande |
-|:---|:---|
-| Lancer le projet | `docker-compose -f docker/docker-compose.yml up` |
-| Lancer en arrière-plan | `docker-compose -f docker/docker-compose.yml up -d` |
-| Arrêter le projet | `docker-compose -f docker/docker-compose.yml down` |
-
-### Accéder à l'application
-Ouvrir un navigateur et aller sur :
-```
-http://localhost:80
-```
+> 📖 Guide d'installation complet (configuration, dépannage, etc.) → [docs/install/README.md](docs/install/README.md)
 
 ## 👨‍💻 Développeurs
 <div align="center">

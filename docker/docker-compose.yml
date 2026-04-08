@@ -37,7 +37,7 @@ services:
     volumes:
       - ../SquidFrontend:/usr/share/nginx/html
     environment:
-      WS_HOST: "192.168.1.36" #Choisir l'IP de deploiement du projet
+      WS_HOST: "10.16.26.1" #Choisir l'IP de deploiement du projet
     entrypoint: /bin/sh -c "echo \"window.SQUIDTCHAT_WS_URL = 'ws://$$WS_HOST:1234';\" > /usr/share/nginx/html/config/config.js && nginx -g 'daemon off;'"
     depends_on:
       backend:

@@ -1,1 +1,1 @@
-window.SQUIDTCHAT_WS_URL = 'ws://192.168.1.36:1234';
+window.SQUIDTCHAT_WS_URL = 'ws://10.16.26.1:1234';
