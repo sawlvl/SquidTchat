@@ -24,20 +24,20 @@ public:
     void get_autentifier();
     QString sendError(const QString &source_error, const QString &type);
     void recherche_rep(QStringList resulta);
+    QString get_user_name();
 signals:
     void signal_autentifier(QString user_name );
     void signal_message_fro_forum(QString message_f);
     void signal_message_for_mp (QString message_mp,QString user_name_mptarget);
     void signal_recherche (QString research);
     void signal_disconnected(QString user_name);
+    void signal_group_make(QString admin,QStringList  memebre_user_name,QString name);
 
 private:
     void send_f_presencecome();
     bool m_autentifier;
     QString m_User_name;
     QWebSocket *m_pclient;
-    //   Username Liste_message
-    QMap <QString,QStringList> m_MP_histroy;
 
 
 private slots:

@@ -9,6 +9,7 @@ CONFIG += c++17 cmdline
 
 SOURCES += \
         main.cpp \
+        squid_group.cpp \
         squidcien_session.cpp \
         squidserver.cpp
 
@@ -18,5 +19,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    squid_group.h \
     squidcien_session.h \
     squidserver.h

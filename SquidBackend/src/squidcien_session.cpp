@@ -91,7 +91,8 @@ void Squidcien_session::onMessageReceived(const QString &message)
 
                     QString message_mp_from = QJsonDocument(QJsonObject{{"type","mp/message"},
                                                                         {"timestamp",QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
-                                                                        {"payload",QJsonObject{{"from",m_User_name},{"content",message_mp}}}}).toJson(QJsonDocument::Compact);
+                                                                        {"payload",QJsonObject{{"from",m_User_name},
+                                                                        {"content",message_mp}}}}).toJson(QJsonDocument::Compact);
 
                     emit signal_message_for_mp(message_mp_from,user_name_mptarget);
 
@@ -107,6 +108,30 @@ void Squidcien_session::onMessageReceived(const QString &message)
 
                     QString research=payload["research"].toString();
                     emit signal_recherche(research);
+
+
+                }else{
+                    QString reponc = "Erreur : autentifier vous au avant";
+                    QString type_ack = "users/list";
+                    QString message = sendError(reponc, type_ack);
+                    sendMessage(message);
+                }
+            }
+            if (type == "grp/create"){
+
+                if (m_autentifier){
+
+                    QString group_name=payload["group_name"].toString();
+
+                    // Extraction du tableau "members"
+                    QJsonArray membersArray = payload["members"].toArray();
+                    QStringList membersList;
+
+                    for (const QJsonValue &value :  std::as_const(membersArray)) {
+                        membersList << value.toString();
+                    }
+
+                    emit signal_group_make(m_User_name,membersList,group_name);
 
 
                 }else{
@@ -242,4 +267,9 @@ void Squidcien_session::recherche_rep(QStringList resulta){
     QString jsonString = QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
 
     sendMessage(jsonString);
+}
+
+QString Squidcien_session::get_user_name()
+{
+    return m_User_name;
 }

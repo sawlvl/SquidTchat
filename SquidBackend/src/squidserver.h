@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QString>
 #include "squidcien_session.h"
+#include "squid_group.h"
 #include <QList>
 
 
@@ -23,12 +24,19 @@ private:
     void brodcast_message_f(QString message_f);
     void mp_message(QString message_mp,QString user_name_mptarget);
     void research(QString recherche);
+    void group_maker(const QString& admin, const QStringList& member_usernames, const QString& name);
+    void group_user_cleaner(Squidcien_session* session);
 
     QWebSocketServer *m_pserver;
     Squidcien_session *m_pnewclient;
+    squid_group *m_p_groupe;
     int porte;
     QMap<QString, Squidcien_session*> User_autentifier;
     QList<Squidcien_session*> User_No_autentifier;
+
+    //nom group | pointeur
+    QMap<QString,squid_group*> Group;
+
 
 private slots:
     void New_Connection();
