@@ -40,12 +40,17 @@ body, html {
     padding: 20px;
     border-top-right-radius: 45px;
     border-bottom-right-radius: 45px;
+    transition: background-color 0.3s;
+}
+
+.conversations.mode-groupe {
+    background-color: #4a9e6e;
 }
 
 .conv-header {
     display: flex;
     gap: 15px;
-    margin-bottom: 40px;
+    margin-bottom: 16px;
     justify-content: flex-end;
     padding-right: 10px;
 }
@@ -59,6 +64,12 @@ body, html {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.conversations.mode-groupe .container-btn-f,
+.conversations.mode-groupe .container-btn-add {
+    background-color: #68bce1;
 }
 
 .btn-f {
@@ -67,11 +78,58 @@ body, html {
     font-weight: bold;
 }
 
+.conversations.mode-groupe .btn-f {
+    color: #636dbe;
+}
+
 .btn-add {
     width: 25px;
     height: auto;
 }
 
+/* ===================================================
+    Toggle GROUPE / MP
+   =================================================== */
+.toggle-container {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    padding: 4px;
+    margin-bottom: 20px;
+    gap: 4px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 24px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.2s;
+}
+
+.toggle-btn.active {
+    background-color: #76d18b;
+    color: #2a2f55;
+}
+
+.conversations.mode-groupe .toggle-btn.active {
+    background-color: #68bce1;
+    color: #2a2f55;
+}
+
+.conversations.mode-groupe {
+    background-color: #636dbe;
+}
+
+/* ===================================================
+    Listes de conversations
+   =================================================== */
 .conv-liste {
     flex: 1;
     overflow-y: auto;
@@ -232,6 +290,12 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s;
+}
+
+/* Bouton envoi en mode Groupe → bleu */
+.mode-groupe-active .chat-btn-fleche {
+    background-color: #68bce1;
 }
 
 .chat-btn-fleche img {
@@ -265,16 +329,16 @@ body, html {
 }
 
 /* ===================================================
-    Zone des messages prives (style identique au forum)
+    Zone des messages prives
    =================================================== */
 .messages {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 60px; /* hauteur de la barre d'envoi */
+    bottom: 60px;
     padding: 12px 20px 12px 20px;
-    padding-top: 70px; /* espace pour la search-bar si visible */
+    padding-top: 70px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;

@@ -3,8 +3,9 @@
  * AUTHOR  : W.Sanquer
  * DATE    : 2026
  *****************************************************/
+
 /* ===================================================
-    Recuperation des elements de la page (Boutons et Zones de texte)
+    Recuperation des elements de la page
    =================================================== */
 // Je recupère le texte où l'utilisateur tape son pseudo.
 const input = document.querySelector(".pseudo");
@@ -22,6 +23,9 @@ if (erreur) {
 
 /* ===================================================
     Blocage du bouton en l'absence du pseudo
+    Le WebSocket est initialise par le Shared Worker
+    des l'arrivee sur forum.html — plus besoin de
+    se connecter ici.
    =================================================== */
 lien.addEventListener("click", (e) => {
     if (input.value.trim().length === 0) {

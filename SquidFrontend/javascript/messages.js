@@ -8,12 +8,19 @@
     Memoire du site (Stockage des messages)
    =================================================== */
 
-// Charge les conversations depuis le sessionStorage au demarrage
 const conversations = JSON.parse(sessionStorage.getItem("mp_conversations") || "{}");
 let convActive = null;
+let convActiveType = null; // "mp" ou "groupe"
+let dernierMPSortant = null;
 
-// Reinitialise la pastille de notif MP (on est sur la page MP)
+// Reinitialise la pastille de notif MP
 sessionStorage.removeItem("mp_notif");
+
+/* ===================================================
+    Mode actif : mp ou groupe
+   =================================================== */
+
+let modeActif = "mp";
 
 /* ===================================================
     Sauvegarde des conversations dans le sessionStorage
@@ -31,17 +38,65 @@ const btnAdd = document.querySelector(".container-btn-add");
 const searchBar = document.querySelector(".search-bar");
 const inputMP = document.querySelector(".input-nouveau-mp");
 const searchResults = document.querySelector(".search-results");
-const convListe = document.querySelector(".conv-liste");
-const attente = document.querySelector(".attente");
+const listeMP = document.getElementById("liste-mp");
+const listeGroupe = document.getElementById("liste-groupe");
+const attente = document.getElementById("attente-mp");
+const attenteGroupe = document.getElementById("attente-groupe");
 const zoneMessages = document.querySelector(".messages");
+const sidebar = document.getElementById("sidebar");
 
 /* ===================================================
     Restauration de la liste des conversations au chargement
    =================================================== */
 
 Object.keys(conversations).forEach(cible => {
-    ajouterConvListe(cible);
+    ajouterConvListe(cible, "mp");
 });
+
+/* ===================================================
+    Gestion du toggle GROUPE / MP
+   =================================================== */
+
+function basculerMode(mode) {
+    modeActif = mode;
+
+    const btnGroupe = document.getElementById("toggle-groupe");
+    const btnMP = document.getElementById("toggle-mp");
+
+    if (mode === "groupe") {
+        btnGroupe.classList.add("active");
+        btnMP.classList.remove("active");
+        sidebar.classList.add("mode-groupe");
+        listeMP.style.display = "none";
+        listeGroupe.style.display = "block";
+        inputMP.placeholder = "Entrer un nom de groupe...";
+
+        if (!convActive || convActiveType !== "groupe") {
+            zoneMessages.style.display = "none";
+            document.querySelector(".chat-input-bar").style.display = "none";
+            attente.style.display = "none";
+            attenteGroupe.style.display = "block";
+        }
+    } else {
+        btnMP.classList.add("active");
+        btnGroupe.classList.remove("active");
+        sidebar.classList.remove("mode-groupe");
+        listeGroupe.style.display = "none";
+        listeMP.style.display = "block";
+        inputMP.placeholder = "Entrer un pseudo...";
+
+        if (!convActive || convActiveType !== "mp") {
+            zoneMessages.style.display = "none";
+            document.querySelector(".chat-input-bar").style.display = "none";
+            attenteGroupe.style.display = "none";
+            attente.style.display = "block";
+        }
+    }
+
+    searchBar.style.display = "none";
+    searchResults.style.display = "none";
+    inputMP.value = "";
+}
 
 /* ===================================================
     Gestion de la barre de recherche
@@ -59,27 +114,27 @@ btnAdd.addEventListener("click", () => {
 });
 
 /* ===================================================
-    Envoi de la recherche au serveur a chaque caractere tape
+    Envoi de la recherche au serveur via le worker
    =================================================== */
 
 inputMP.addEventListener("input", () => {
     const recherche = inputMP.value.trim();
-    // Cache les resultats si l'input est vide
     if (recherche === "") {
         searchResults.style.display = "none";
         return;
     }
-    socket.send(JSON.stringify({
-        type: "users/list",
-        timestamp: new Date().toISOString(),
-        payload: {
-            research: recherche
-        }
-    }));
+    workerPort.postMessage({
+        type: "send",
+        data: JSON.stringify({
+            type: "users/list",
+            timestamp: new Date().toISOString(),
+            payload: { research: recherche }
+        })
+    });
 });
 
 /* ===================================================
-    Raccourci clavier
+    Raccourci clavier pour la touche echap
    =================================================== */
 
 inputMP.addEventListener("keydown", (e) => {
@@ -95,12 +150,10 @@ inputMP.addEventListener("keydown", (e) => {
    =================================================== */
 
 function afficherResultatsRecherche(users) {
-    // Cache les resultats si l'input est vide
     if (inputMP.value.trim() === "") {
         searchResults.style.display = "none";
         return;
     }
-    // Affiche les resultats sous la barre de recherche
     searchResults.style.display = "block";
     searchResults.innerHTML = "";
     users.forEach(user => {
@@ -122,27 +175,33 @@ function afficherResultatsRecherche(users) {
    =================================================== */
 
 function ouvrirConversation(cible) {
-    // Cree la conversation si elle n'existe pas encore
     if (!conversations[cible]) {
         conversations[cible] = [];
         sauvegarderConversations();
-        ajouterConvListe(cible);
+        ajouterConvListe(cible, "mp");
     }
-    afficherConversation(cible);
+    afficherConversation(cible, "mp");
 }
 
 /* ===================================================
     Mise a jour de la liste des conversations
    =================================================== */
 
-function ajouterConvListe(cible) {
+function ajouterConvListe(cible, type) {
+    const liste = type === "groupe" ? listeGroupe : listeMP;
+
+    // Evite les doublons
+    if (liste.querySelector(`[data-cible="${cible}"]`)) return;
+
     const item = document.createElement("div");
     item.classList.add("conv-item");
+    item.dataset.cible = cible;
+    item.dataset.type = type;
 
     const label = document.createElement("span");
     label.classList.add("conv-item-label");
     label.textContent = cible;
-    label.addEventListener("click", () => afficherConversation(cible));
+    label.addEventListener("click", () => afficherConversation(cible, type));
 
     const btnSupp = document.createElement("button");
     btnSupp.classList.add("conv-item-suppr");
@@ -150,29 +209,38 @@ function ajouterConvListe(cible) {
     btnSupp.title = "Supprimer la conversation";
     btnSupp.addEventListener("click", (e) => {
         e.stopPropagation();
-        supprimerConversation(cible, item);
+        supprimerConversation(cible, item, type);
     });
 
     item.appendChild(label);
     item.appendChild(btnSupp);
-    convListe.appendChild(item);
+    liste.appendChild(item);
 }
 
 /* ===================================================
     Suppression d'une conversation
    =================================================== */
 
-function supprimerConversation(cible, item) {
-    delete conversations[cible];
-    sauvegarderConversations();
+function supprimerConversation(cible, item, type) {
+    if (type === "mp") {
+        delete conversations[cible];
+        sauvegarderConversations();
+    }
     item.remove();
-    // Si c'etait la conv active, revenir a l'ecran d'attente
+
     if (convActive === cible) {
         convActive = null;
+        convActiveType = null;
         zoneMessages.style.display = "none";
         zoneMessages.innerHTML = "";
         document.querySelector(".chat-input-bar").style.display = "none";
-        attente.style.display = "block";
+        if (type === "groupe") {
+            attenteGroupe.style.display = "block";
+            attente.style.display = "none";
+        } else {
+            attente.style.display = "block";
+            attenteGroupe.style.display = "none";
+        }
     }
 }
 
@@ -180,29 +248,29 @@ function supprimerConversation(cible, item) {
     Affichage de la zone de conversations
    =================================================== */
 
-function afficherConversation(cible) {
+function afficherConversation(cible, type) {
     convActive = cible;
+    convActiveType = type;
 
-    // Met en evidence l'item actif dans la liste
     document.querySelectorAll(".conv-item").forEach(el => {
-        el.classList.toggle("active", el.textContent === cible);
+        el.classList.toggle("active", el.dataset.cible === cible);
     });
 
-    // Cache le logo et affiche la zone messages
     attente.style.display = "none";
+    attenteGroupe.style.display = "none";
     zoneMessages.style.display = "flex";
     document.querySelector(".chat-input-bar").style.display = "block";
     zoneMessages.innerHTML = "";
-    // Affiche tous les messages de la conversation
-    conversations[cible].forEach(msg => {
-        ajouterBulle(msg.from, msg.content);
-    });
-    // Scroll vers le bas
+
+    if (type === "mp" && conversations[cible]) {
+        conversations[cible].forEach(msg => ajouterBulle(msg.from, msg.content));
+    }
+
     zoneMessages.scrollTop = zoneMessages.scrollHeight;
 }
 
 /* ===================================================
-    Envoi d'un message prive
+    Envoi d'un message prive via le worker
    =================================================== */
 
 function envoyerMP() {
@@ -210,26 +278,24 @@ function envoyerMP() {
     const texte = chatSaisie.value.trim();
     if (!texte || !convActive) return;
 
-    socket.send(JSON.stringify({
-        type: "mp/send",
-        timestamp: new Date().toISOString(),
-        payload: {
-            to: convActive,
-            content: texte
-        }
-    }));
+    if (convActiveType === "mp") {
+        workerPort.postMessage({
+            type: "send",
+            data: JSON.stringify({
+                type: "mp/send",
+                timestamp: new Date().toISOString(),
+                payload: { to: convActive, content: texte }
+            })
+        });
+        conversations[convActive].push({ from: pseudo, content: texte });
+        sauvegarderConversations();
+        ajouterBulle(pseudo, texte);
+        dernierMPSortant = { to: convActive, content: texte };
+    }
 
-    // Ajoute le message dans la conversation locale et sauvegarde
-    conversations[convActive].push({
-        from: pseudo,
-        content: texte
-    });
-    sauvegarderConversations();
-    ajouterBulle(pseudo, texte);
     chatSaisie.value = "";
 }
 
-// Valider avec Entree
 document.querySelector(".chat-saisie").addEventListener("keydown", (e) => {
     if (e.key === "Enter") envoyerMP();
 });
@@ -260,4 +326,30 @@ function ajouterBulle(from, content) {
 
     zoneMessages.appendChild(bubble);
     zoneMessages.scrollTop = zoneMessages.scrollHeight;
+}
+
+function annulerDernierMPEnErreur(reason) {
+    if (!dernierMPSortant) {
+        alert(reason);
+        return;
+    }
+
+    const conversation = conversations[dernierMPSortant.to];
+    const dernierMessage = conversation && conversation[conversation.length - 1];
+
+    if (
+        dernierMessage &&
+        dernierMessage.from === pseudo &&
+        dernierMessage.content === dernierMPSortant.content
+    ) {
+        conversation.pop();
+        sauvegarderConversations();
+    }
+
+    if (convActive === dernierMPSortant.to && convActiveType === "mp") {
+        afficherConversation(convActive, convActiveType);
+    }
+
+    dernierMPSortant = null;
+    alert(reason);
 }

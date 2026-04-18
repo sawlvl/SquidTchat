@@ -10,30 +10,38 @@
 <body>
     <div class="pages">
 
-        <div class="conversations">
+        <div class="conversations" id="sidebar">
 
             <div class="conv-header">
-
                 <div class="container-btn-f">
                     <a href="../pages/forum.html" class="btn-f">F</a>
                 </div>
-                <div class="container-btn-add">
+                <div class="container-btn-add" id="btn-add">
                     <img src="../img/Boutons/add_button.svg" class="btn-add" alt="Ajouter">
                 </div>
-                
             </div>
-            <div class="conv-liste"></div>
+
+            <div class="toggle-container">
+                <button class="toggle-btn" id="toggle-groupe" onclick="basculerMode('groupe')">GROUPE</button>
+                <button class="toggle-btn active" id="toggle-mp" onclick="basculerMode('mp')">MP</button>
+            </div>
+
+            <div class="conv-liste" id="liste-mp"></div>
+
+            <div class="conv-liste" id="liste-groupe" style="display:none;"></div>
+
         </div>
 
         <div class="main-content">
+
             <div class="search-bar" style="display:none;">
                 <input type="text" class="input-nouveau-mp" placeholder="Entrer un pseudo..." />
                 <div class="search-results"></div>
             </div>
 
             <div class="messages" style="display: none;"></div>
-            <div class="chat-input-bar" style="display:none;">
 
+            <div class="chat-input-bar" style="display:none;">
                 <div class="chat-input-wrapper">
                     <input type="text" class="chat-saisie" placeholder="Votre message..." />
                     <button class="chat-btn-fleche" onclick="envoyerMP()">
@@ -42,13 +50,19 @@
                 </div>
             </div>
 
-            <div class="attente">
+            <div class="attente" id="attente-mp">
                 <img src="../img/Logos/squidtchat_attente.jpg" alt="Logo attente">
                 <p>CLIQUE SUR UN MESSAGE PRIVÉ</p>
             </div>
 
+            <div class="attente" id="attente-groupe" style="display:none;">
+                <img src="../img/Logos/squidtchat_attente_GRP.png" alt="Logo attente">
+                <p>CLIQUE OU CRÉE UN GROUPE</p>
+            </div>
+
         </div>
     </div>
+
     <script src="../javascript/auth.js"></script>
     <script src="../config/config.js"></script>
     <script src="../javascript/websocket.js"></script>
