@@ -1,9 +1,7 @@
 #ifndef SQUID_GROUP_H
 #define SQUID_GROUP_H
-#include "squidcien_session.h"
 #include <QStringList>
 #include <QObject>
-#include "squidcien_session.h"
 #include <QObject>
 #include <QWebSocketServer>
 #include <QMap>
@@ -16,7 +14,7 @@
 #include <QJsonValue>      // Pour manipuler une donnée précise
 #include <QJsonParseError> // TRES important pour savoir pourquoi ça crash
 #include <QStringList>
-
+#include "squidcien_session.h"
 class squid_group : public QObject
 {
     Q_OBJECT
@@ -26,6 +24,9 @@ public:
     QString get_name();
     Squidcien_session* get_p_admin();
     QList <Squidcien_session*> get_p_member();
+    QStringList  get_b_words();
+    void add_b_words(QString b_word);
+    void dell_b_words(QString b_word);
     void dell_member(Squidcien_session* user);
 
 private:

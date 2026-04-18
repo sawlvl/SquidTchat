@@ -27,6 +27,21 @@ QList<Squidcien_session *> squid_group::get_p_member()
     return m_member;
 }
 
+QStringList squid_group::get_b_words()
+{
+    return b_words_list;
+}
+
+void squid_group::add_b_words(QString b_word)
+{
+    b_words_list.append(b_word);
+}
+
+void squid_group::dell_b_words(QString b_word)
+{
+    b_words_list.removeOne(b_word);
+}
+
 void squid_group::dell_member(Squidcien_session * user)
 {
     m_member.removeOne(user);

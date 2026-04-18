@@ -26,6 +26,12 @@ private:
     void research(QString recherche);
     void group_maker(const QString& admin, const QStringList& member_usernames, const QString& name);
     void group_user_cleaner(Squidcien_session* session);
+    void on_group_leave_requested(QString user_name, QString group_name, Squidcien_session* session);
+    void brodcast_message_group(QString message_g,QString group,Squidcien_session* session);
+    void add_b_word(QString b_word,QString group_name,Squidcien_session* session);
+    void dell_b_word(QString b_word,QString group_name,Squidcien_session* session);
+    void kick_user(QString taget_user,QString group_name,Squidcien_session* session);
+
 
     QWebSocketServer *m_pserver;
     Squidcien_session *m_pnewclient;
