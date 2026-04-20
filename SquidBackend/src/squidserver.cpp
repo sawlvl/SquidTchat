@@ -58,11 +58,9 @@ void SquidServer::New_Connection()
         // connect gestion de la deconextion sortie des liste
         connect(m_pnewclient, &Squidcien_session::signal_disconnected,this, &SquidServer::client_disconnected);
 
-        // connect creation de group
+        // connect creation de groupe
         connect(m_pnewclient, &Squidcien_session::signal_group_make,this, &SquidServer::group_maker);
 
-<<<<<<< Updated upstream
-=======
         // connect sortie groupe
         connect(m_pnewclient, &Squidcien_session::signal_group_leave,this, &SquidServer::on_group_leave_requested);
 
@@ -85,7 +83,6 @@ void SquidServer::New_Connection()
         //connect info admin grp
         connect(m_pnewclient, &Squidcien_session::signal_admin_info,this, &SquidServer::grp_admin_info);
 
->>>>>>> Stashed changes
         User_No_autentifier.append(m_pnewclient);
         qDebug() << "Le nouvaux est passer dans la fille d'attant";
     }
@@ -138,18 +135,14 @@ void SquidServer::brodcast_message_f(QString message_f)
 {
     qDebug() << "Broadcast du message forum :" << message_f;
 
-    // On parcourt tous les objets Squidcien_session stockés dans la Map
     for (Squidcien_session* session : User_autentifier.values()) {
 
-        // On vérifie toujours que le pointeur n'est pas nul (sécurité enfant)
         if (session) {
             session->sendMessage(message_f);
         }
     }
 }
 
-<<<<<<< Updated upstream
-=======
 void SquidServer::brodcast_message_group(QString message_g,QString group,Squidcien_session* session)
 {
     bool system_message=false;
@@ -214,38 +207,25 @@ void SquidServer::brodcast_message_group(QString message_g,QString group,Squidci
 }
 
 
->>>>>>> Stashed changes
 void SquidServer::client_disconnected(QString user_name){
     Squidcien_session* session = qobject_cast<Squidcien_session*>(sender());
-    //securiter pour ne pas sup 2 fois
     if (!user_name.isEmpty()) {
-        // Utilisateur authentifié → on le retire de la map principale
         User_autentifier.remove(user_name);
         qDebug() << "Utilisateur retiré :" << user_name;
     }
 
     if (session) {
-        // arrache tous les connect avec la mort pur est simple
         disconnect(this, nullptr, session, nullptr);
 
-        // supprestion de l'user dans les grp et des grp ou il est admin
         group_user_cleaner(session);
 
-        // Dans tous les cas → retirer de la file d'attente (authentifié ou non)
         User_No_autentifier.removeAll(session);
         session->deleteLater(); // libère la session proprement
     }
 }
-<<<<<<< Updated upstream
-// constriction  de grp optmiser pour ne pas copier les élemnt qui ne sont pas modifier
-void SquidServer::group_maker(const QString& admin, const QStringList& member_usernames, const QString& name)
-{
-// rappel les return dans un void c'est un nuke de la fonction
-=======
 
 void SquidServer::group_maker(const QString& admin, const QStringList& member_usernames, const QString& name)
 {
->>>>>>> Stashed changes
     if (!User_autentifier.contains(admin))
         return;
 
@@ -275,9 +255,6 @@ void SquidServer::group_maker(const QString& admin, const QStringList& member_us
         return;
     }
 
-<<<<<<< Updated upstream
-    // nom de groupe déjà pris
-=======
     // Nom vide
     if (name.trimmed().isEmpty()) {
         sender_session->sendMessage(
@@ -290,7 +267,6 @@ void SquidServer::group_maker(const QString& admin, const QStringList& member_us
     }
 
     // Nom déjà pris
->>>>>>> Stashed changes
     if (Group.contains(name)) {
         sender_session->sendMessage(
             sender_session->sendError(
@@ -349,18 +325,28 @@ void SquidServer::group_user_cleaner(Squidcien_session *session)
     for (squid_group* groupe : Group.values()) {
         if (groupe){
             Squidcien_session* p_admin = groupe->get_p_admin();
-            for (Squidcien_session* user : groupe->get_p_member()) {
-                if (user==session){
-                    qDebug() << "le membre " << session->get_user_name() << " vas etre suprimer du grp " << groupe->get_name() ;
-                    groupe->dell_member(session);
-                    break;
-                }
+            if  (p_admin==session){
+                QString warn ="Erreur : L'administrateur a fermé le groupe.";
+                QString status= "group_closed";
+                brodcast_message_group(session->sendInfo_S(warn,status,groupe->get_name()),groupe->get_name(),session);
+                Grp_dell.append(groupe);
+            }else{
+                for (Squidcien_session* user : groupe->get_p_member()) {
+
+
+
+                    if (user==session){
+                        qDebug() << "le membre " << session->get_user_name() << " vas etre suprimer du grp " << groupe->get_name() ;
+                        QString warn ="Erreur : L'utilisateur "+session->get_user_name()+" a quitté le groupe.";
+                        QString status= "user_leave";
+                        brodcast_message_group(session->sendInfo_S(warn,status,groupe->get_name()),groupe->get_name(),session);
+                        groupe->dell_member(session);
+                        break;
+                    }}
             }
 
-            if  (p_admin==session){
-                Grp_dell.append(groupe);
-            }
         }
+
     }
     if (!Grp_dell.isEmpty()){
         for (squid_group* groupe : Grp_dell) {
@@ -371,8 +357,6 @@ void SquidServer::group_user_cleaner(Squidcien_session *session)
         }
     }
 }
-<<<<<<< Updated upstream
-=======
 void SquidServer::on_group_leave_requested(QString user_name, QString group_name, Squidcien_session* session)
 {
     // if nulptr
@@ -404,7 +388,6 @@ void SquidServer::on_group_leave_requested(QString user_name, QString group_name
         groupe->dell_member(session);
     }
 }
->>>>>>> Stashed changes
 void SquidServer::mp_message(QString message_mp, QString user_name_mptarget)
 {
     // 2. Recherche optimisée (ne parcourt l'arbre qu'une seule fois)
@@ -430,8 +413,6 @@ void SquidServer::mp_message(QString message_mp, QString user_name_mptarget)
         }
     }
 }
-<<<<<<< Updated upstream
-=======
 
 void SquidServer::add_b_word(QString b_word,QString group_name,Squidcien_session* session){
 
@@ -509,7 +490,7 @@ void SquidServer::grp_admin_info(QString group_name, Squidcien_session* session)
     }
     if (!(session==p_groupe->get_p_admin())){
         QString reponc = "Erreur : Vous devez avoir les droits admin pour faire cela.";
-        QString type_ack = "grp/user_not_found";
+        QString type_ack = "grp/no_permit";
         session->sendMessage(session->sendError(reponc,type_ack));
         return;
 
@@ -572,4 +553,3 @@ void SquidServer::kick_user(QString taget_user, QString group_name, Squidcien_se
         session->sendMessage(session->sendError(reponc,type_ack));
     }
 }
->>>>>>> Stashed changes

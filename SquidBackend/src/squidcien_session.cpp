@@ -92,7 +92,7 @@ void Squidcien_session::onMessageReceived(const QString &message)
                     QString message_mp_from = QJsonDocument(QJsonObject{{"type","mp/message"},
                                                                         {"timestamp",QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
                                                                         {"payload",QJsonObject{{"from",m_User_name},
-                                                                        {"content",message_mp}}}}).toJson(QJsonDocument::Compact);
+                                                                                                {"content",message_mp}}}}).toJson(QJsonDocument::Compact);
 
                     emit signal_message_for_mp(message_mp_from,user_name_mptarget);
 
@@ -117,20 +117,12 @@ void Squidcien_session::onMessageReceived(const QString &message)
                     sendMessage(message);
                 }
             }
-            if (type == "grp/create"){
-
+            if (type.contains("grp/")){
                 if (m_autentifier){
+                    if (type == "grp/create"){
 
-                    QString group_name=payload["group_name"].toString();
 
-                    // Extraction du tableau "members"
-                    QJsonArray membersArray = payload["members"].toArray();
-                    QStringList membersList;
 
-<<<<<<< Updated upstream
-                    for (const QJsonValue &value :  std::as_const(membersArray)) {
-                        membersList << value.toString();
-=======
                         QString group_name=payload["group_name"].toString();
 
                         // Extraction du tableau "members"
@@ -157,13 +149,10 @@ void Squidcien_session::onMessageReceived(const QString &message)
 
                         emit signal_group_leave(m_User_name,group_name,this);
 
->>>>>>> Stashed changes
                     }
 
-                    emit signal_group_make(m_User_name,membersList,group_name);
+                    if (type=="grp/close"){
 
-<<<<<<< Updated upstream
-=======
                         QString group_name=payload["group_name"].toString();
 
                         emit signal_group_leave(m_User_name,group_name,this);
@@ -208,11 +197,8 @@ void Squidcien_session::onMessageReceived(const QString &message)
                         QString group_name=payload["group_name"].toString();
 
                         emit signal_admin_info(group_name,this);
-
                     }
 
-
->>>>>>> Stashed changes
 
                 }else{
                     QString reponc = "Erreur : autentifier vous au avant";
@@ -221,19 +207,17 @@ void Squidcien_session::onMessageReceived(const QString &message)
                     sendMessage(message);
                 }
             }
-
         }
     }
+
 }
-
-
 void Squidcien_session::Disconnected(){
     QJsonObject payload;
     payload["pseudo"] = m_User_name;
 
     QJsonObject root;
     root["type"] = "presence/left";
-    root["timestamp"] = "2026-03-20T14:32:01Z"; // a a changer avec le vrais temps
+    root["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
     root["payload"] = payload;
 
     QJsonDocument doc(root);
@@ -266,7 +250,7 @@ void Squidcien_session::user_data_update(bool server_status,QString User_name){
 
             QJsonObject root;
             root["type"] = "auth/ack";
-            root["timestamp"] = "2026-03-20T14:32:01Z"; // a a changer avec le vrais temps
+            root["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
             root["payload"] = payload;
 
             QJsonDocument doc(root);
@@ -286,7 +270,7 @@ void Squidcien_session::send_f_presencecome(){
 
         QJsonObject root;
         root["type"] = "presence/come";
-        root["timestamp"] = "2026-03-20T14:32:01Z"; // a a changer avec le vrais temps
+        root["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
         root["payload"] = payload;
 
         QJsonDocument doc(root);
@@ -333,6 +317,20 @@ QString Squidcien_session::sendError(const QString &source_error, const QString 
     return doc.toJson(QJsonDocument::Indented);
 }
 
+QString Squidcien_session::sendInfo_S(const QString &source_error, const QString &status,QString group_name) {
+    QJsonObject payload;
+    payload["status"] = status;
+    payload["raison"] = source_error;
+    payload["group_name"] = group_name;
+
+    QJsonObject racine;
+    racine["type"] = "grp/system_info";
+    racine["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+    racine["payload"] = payload;
+
+    QJsonDocument doc(racine);
+    return doc.toJson(QJsonDocument::Indented);
+}
 
 void Squidcien_session::recherche_rep(QStringList resulta){
     QJsonObject payload;
@@ -340,7 +338,7 @@ void Squidcien_session::recherche_rep(QStringList resulta){
 
     QJsonObject root;
     root["type"] = "users/list";
-    root["timestamp"] = "2026-03-20T14:32:01Z"; // a a changer avec le vrais temps
+    root["timestamp"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
     root["payload"] = payload;
 
     QJsonDocument doc(root);

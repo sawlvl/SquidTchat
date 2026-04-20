@@ -25,6 +25,7 @@ public:
     QString sendError(const QString &source_error, const QString &type);
     void recherche_rep(QStringList resulta);
     QString get_user_name();
+    QString sendInfo_S(const QString &source_error, const QString &status,QString group_name);
 signals:
     void signal_autentifier(QString user_name );
     void signal_message_fro_forum(QString message_f);
@@ -32,8 +33,6 @@ signals:
     void signal_recherche (QString research);
     void signal_disconnected(QString user_name);
     void signal_group_make(QString admin,QStringList  memebre_user_name,QString name);
-<<<<<<< Updated upstream
-=======
     void signal_group_leave(QString user_name,QString groupe_name,Squidcien_session* p_session);
     void signal_message_for_groupe(QString message_g,QString groupe,Squidcien_session* session);
     void signal_add_b_word(QString b_words,QString group_name,Squidcien_session* session);
@@ -41,7 +40,6 @@ signals:
     void signal_kick_user_grp(QString taget_user,QString group_name,Squidcien_session* session);
     void signal_info(QString group_name,Squidcien_session* session);
     void signal_admin_info(QString group_name,Squidcien_session* session);
->>>>>>> Stashed changes
 
 private:
     void send_f_presencecome();
