@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SquidTchat | MP</title>
+    <title>SquidTchat | Messages</title>
     <link rel="stylesheet" type="text/css" href="../css/messages.css">
     <link rel="stylesheet" href="../css/forum.css">
 </head>
@@ -35,18 +35,94 @@
         <div class="main-content">
 
             <div class="search-bar" style="display:none;">
-                <input type="text" class="input-nouveau-mp" placeholder="Entrer un pseudo..." />
-                <div class="search-results"></div>
+                <div class="mp-search-section">
+                    <input type="text" class="input-nouveau-mp" placeholder="Entrer un pseudo..." />
+                    <div class="search-results"></div>
+                </div>
+
+                <div class="group-create-section" style="display:none;">
+                    <div class="group-search-top">
+                        <div class="group-search-input-shell">
+                            <input type="text" class="input-group-member" placeholder="Cherchr un utilisateur ..." />
+                            <button class="group-search-action" type="button" tabindex="-1" aria-hidden="true">
+                                <img src="../img/Boutons/arrow_right_button.svg" alt="Recherche"/>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="group-search-results"></div>
+
+                    <div class="group-builder-card">
+                        <p class="group-builder-label">Nom du groupe :</p>
+                        <input type="text" class="input-group-name" placeholder="Entree le nom du groupe..." />
+
+                        <p class="group-builder-label">Menmbre :</p>
+                        <div class="group-selected-members"></div>
+
+                        <button class="create-group-btn" type="button">
+                            <span>Cree le groupe</span>
+                            <span class="create-group-icon">&#10003;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-header" style="display:none;">
+                <div class="chat-header-main">
+                    <p class="chat-mode-label">Conversation</p>
+                    <h1 class="chat-title">Messagerie</h1>
+                </div>
             </div>
 
             <div class="messages" style="display: none;"></div>
 
+            <aside class="group-info-panel" id="group-info-panel">
+                <div class="group-info-panel-header">
+                    <div>
+                        <h2 class="group-panel-title">PANELLE D'INFORMATION DU GROUPE</h2>
+                    </div>
+                    <button class="group-panel-close" id="group-info-close" type="button">&times;</button>
+                </div>
+
+                <div class="group-info-body">
+                    <section class="group-info-section group-admin-summary">
+                        <h3>Admin :</h3>
+                        <div class="group-admin-chip group-admin-name">-</div>
+                    </section>
+
+                    <section class="group-info-section admin-only group-admin-words" style="display:none;">
+                        <h3>Mots a bloquer :</h3>
+                        <div class="group-words-panel">
+                            <div class="group-words-list"></div>
+                            <div class="group-admin-form">
+                                <input type="text" class="group-word-input" placeholder="Entrer un mot a bloquer ..." />
+                                <button class="group-word-add-btn" type="button">&#10140;</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="group-info-section">
+                        <h3>Menmbre :</h3>
+                        <div class="group-members-panel">
+                            <div class="group-members-list"></div>
+                            <div class="group-kick-list admin-only" style="display:none;"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="group-info-footer">
+                    <button class="group-secondary-action" id="group-leave-btn" type="button">Quitter le groupe</button>
+                    <button class="group-danger-action admin-only" id="group-close-btn" type="button" style="display:none;">Fermer le groupe</button>
+                </div>
+            </aside>
+
             <div class="chat-input-bar" style="display:none;">
                 <div class="chat-input-wrapper">
                     <input type="text" class="chat-saisie" placeholder="Votre message..." />
-                    <button class="chat-btn-fleche" onclick="envoyerMP()">
+                    <button class="chat-btn-fleche" onclick="envoyerMessageConversation()">
                         <img src="../img/Boutons/arrow_right_button.svg" alt="Envoyer"/>
                     </button>
+                    <button class="chat-btn-info" id="group-info-toggle" type="button" style="display:none;">i</button>
                 </div>
             </div>
 

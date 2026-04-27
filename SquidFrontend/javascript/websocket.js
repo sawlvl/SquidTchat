@@ -21,6 +21,7 @@ workerPort.start();
    =================================================== */
 
 const wsUrl = window.SQUIDTCHAT_WS_URL || "ws://127.0.0.1:1234";
+const WS_GROUP_STORAGE_KEY = "grp_conversations";
 
 workerPort.postMessage({
     type: "init",
@@ -69,6 +70,15 @@ workerPort.onmessage = (event) => {
 
 function traiterMessage(data) {
     const reponse = JSON.parse(data);
+    const gestionnaireLocalGroupe = typeof handleGroupServerMessage === "function";
+
+    if (!gestionnaireLocalGroupe && reponse.type.startsWith("grp/")) {
+        synchroniserGroupesSession(reponse);
+    }
+
+    if (gestionnaireLocalGroupe && handleGroupServerMessage(reponse)) {
+        return;
+    }
 
     // Indique si on est sur la page forum
     const surPageForum = typeof afficherBulle === "function" && !document.querySelector(".conversations");
@@ -197,6 +207,121 @@ function afficherNotif(texte) {
     const zone = document.querySelector(".messages");
     zone.appendChild(notif);
     zone.scrollTop = zone.scrollHeight;
+}
+
+function lireGroupesSession() {
+    try {
+        return JSON.parse(sessionStorage.getItem(WS_GROUP_STORAGE_KEY) || "{}");
+    } catch (error) {
+        return {};
+    }
+}
+
+function ecrireGroupesSession(groupes) {
+    sessionStorage.setItem(WS_GROUP_STORAGE_KEY, JSON.stringify(groupes));
+}
+
+function normaliserGroupeSession(groupe) {
+    const source = groupe && typeof groupe === "object" ? groupe : {};
+    return {
+        messages: Array.isArray(source.messages) ? source.messages : [],
+        members: Array.isArray(source.members) ? source.members : [],
+        admin: typeof source.admin === "string" ? source.admin : "",
+        words: Array.isArray(source.words) ? source.words : [],
+        unread: Boolean(source.unread)
+    };
+}
+
+function marquerNotifMessages() {
+    sessionStorage.setItem("mp_notif", "1");
+    const btnMessages = document.querySelector("a.btn-mp[href*='messages']");
+    if (btnMessages) btnMessages.classList.add("notif-mp");
+}
+
+function synchroniserGroupesSession(reponse) {
+    const payload = reponse.payload || {};
+    const groupes = lireGroupesSession();
+    const nomGroupe = payload.group_name;
+
+    if (!nomGroupe) {
+        return;
+    }
+
+    const groupe = normaliserGroupeSession(groupes[nomGroupe]);
+    let groupeSupprime = false;
+
+    if (reponse.type === "grp/create_ack") {
+        groupes[nomGroupe] = groupe;
+        groupe.unread = true;
+        marquerNotifMessages();
+    }
+
+    if (reponse.type === "grp/send") {
+        groupe.messages.push({
+            from: payload.from,
+            content: payload.content
+        });
+        groupe.unread = true;
+        groupes[nomGroupe] = groupe;
+        marquerNotifMessages();
+    }
+
+    if (reponse.type === "grp/info_rep") {
+        if (Array.isArray(payload.members)) {
+            groupe.members = payload.members.filter(Boolean);
+            if (!groupe.members.includes(pseudo)) {
+                delete groupes[nomGroupe];
+                groupeSupprime = true;
+            }
+        }
+        if (!groupeSupprime) {
+            if (typeof payload.admin === "string") groupe.admin = payload.admin;
+            groupes[nomGroupe] = groupe;
+        }
+    }
+
+    if (reponse.type === "grp/admin_info_rep") {
+        if (Array.isArray(payload.members)) {
+            groupe.members = payload.members.filter(Boolean);
+            if (!groupe.members.includes(pseudo)) {
+                delete groupes[nomGroupe];
+                groupeSupprime = true;
+            }
+        }
+        if (!groupeSupprime) {
+            if (typeof payload.admin === "string") groupe.admin = payload.admin;
+            if (Array.isArray(payload.words)) groupe.words = payload.words.filter(Boolean);
+            groupes[nomGroupe] = groupe;
+        }
+    }
+
+    if (reponse.type === "grp/system_info") {
+        groupe.messages.push({
+            from: "system",
+            content: payload.raison || "Information groupe",
+            system: true
+        });
+
+        const utilisateurConcerne =
+            typeof payload.raison === "string" &&
+            typeof pseudo === "string" &&
+            payload.raison.toLowerCase().includes(pseudo.toLowerCase());
+
+        if (payload.status === "group_closed" || (payload.status === "user_kicked" && utilisateurConcerne)) {
+            delete groupes[nomGroupe];
+            groupeSupprime = true;
+        } else {
+            groupes[nomGroupe] = groupe;
+            groupe.unread = true;
+            marquerNotifMessages();
+        }
+    }
+
+    if (!groupeSupprime && groupes[nomGroupe]) {
+        groupes[nomGroupe] = normaliserGroupeSession(groupes[nomGroupe]);
+    }
+
+    ecrireGroupesSession(groupes);
 }
 
 function enregistrerEvenementForum(evenement) {

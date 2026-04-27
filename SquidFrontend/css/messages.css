@@ -5,8 +5,32 @@
  *****************************************************/
 
 /* ===================================================
-    Les reglages de la page
+    Variables globales
    =================================================== */
+:root {
+    --bg-main: #1f2340;
+    --bg-panel: #636dbe;
+    --bg-panel-hover: #3b4280;
+    --bg-panel-active: #3b5bdb;
+    --bg-panel-group: #636dbe;
+    --bg-panel-group-hover: #2f6d4e;
+    --bg-panel-group-active: #44aa79;
+    --bg-surface: #232849;
+    --bg-surface-soft: #2a2f55;
+    --bg-surface-alt: #51589d;
+    --bg-card: rgba(10, 12, 26, 0.24);
+    --accent-mp: #76d18b;
+    --accent-mp-strong: #4dabf7;
+    --accent-group: #68bce1;
+    --accent-group-strong: #7de3af;
+    --text-main: #ffffff;
+    --text-soft: rgba(255, 255, 255, 0.72);
+    --danger: #ff6b6b;
+    --border-soft: rgba(255, 255, 255, 0.08);
+    --shadow-soft: 0 18px 40px rgba(7, 11, 24, 0.28);
+    --font-display: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -14,12 +38,27 @@
     text-decoration: none;
 }
 
-body, html {
+/* ===================================================
+    Layout principal (Body)
+   =================================================== */
+body,
+html {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    background-color: #2a2f55;
-    font-family: sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(118, 209, 139, 0.08), transparent 28%),
+        radial-gradient(circle at right center, rgba(77, 171, 247, 0.12), transparent 26%),
+        var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-display);
+}
+
+body.mode-groupe-active {
+    background:
+        radial-gradient(circle at top left, rgba(104, 188, 225, 0.16), transparent 28%),
+        radial-gradient(circle at right center, rgba(125, 227, 175, 0.12), transparent 24%),
+        var(--bg-main);
 }
 
 .pages {
@@ -29,22 +68,22 @@ body, html {
 }
 
 /* ===================================================
-    Zone des conversations
+    Panneau des conversations
    =================================================== */
 .conversations {
     width: 320px;
-    background-color: #636dbe;
+    background-color: var(--bg-panel);
     height: 100%;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    border-top-right-radius: 45px;
-    border-bottom-right-radius: 45px;
-    transition: background-color 0.3s;
+    border-top-right-radius: 38px;
+    border-bottom-right-radius: 38px;
+    transition: background-color 0.3s ease;
 }
 
 .conversations.mode-groupe {
-    background-color: #4a9e6e;
+    background-color: var(--bg-panel-group);
 }
 
 .conv-header {
@@ -55,31 +94,33 @@ body, html {
     padding-right: 10px;
 }
 
-.container-btn-f, .container-btn-add {
+.container-btn-f,
+.container-btn-add {
     width: 55px;
     height: 55px;
-    background-color: #76d18b;
+    background-color: var(--accent-mp);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.container-btn-f:hover,
+.container-btn-add:hover {
+    transform: translateY(-1px);
 }
 
 .conversations.mode-groupe .container-btn-f,
 .conversations.mode-groupe .container-btn-add {
-    background-color: #68bce1;
+    background-color: var(--accent-group);
 }
 
 .btn-f {
-    color: #636dbe;
+    color: var(--bg-panel);
     font-size: 24px;
     font-weight: bold;
-}
-
-.conversations.mode-groupe .btn-f {
-    color: #636dbe;
 }
 
 .btn-add {
@@ -87,12 +128,9 @@ body, html {
     height: auto;
 }
 
-/* ===================================================
-    Toggle GROUPE / MP
-   =================================================== */
 .toggle-container {
     display: flex;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.18);
     border-radius: 30px;
     padding: 4px;
     margin-bottom: 20px;
@@ -101,39 +139,31 @@ body, html {
 
 .toggle-btn {
     flex: 1;
-    padding: 8px 0;
+    padding: 10px 0;
     border: none;
     border-radius: 24px;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     cursor: pointer;
     background: transparent;
-    color: rgba(255, 255, 255, 0.6);
-    transition: all 0.2s;
+    color: rgba(255, 255, 255, 0.62);
+    transition: all 0.2s ease;
 }
 
 .toggle-btn.active {
-    background-color: #76d18b;
-    color: #2a2f55;
+    background-color: var(--accent-mp);
+    color: var(--bg-main);
 }
 
 .conversations.mode-groupe .toggle-btn.active {
-    background-color: #68bce1;
-    color: #2a2f55;
+    background-color: var(--accent-group);
 }
 
-.conversations.mode-groupe {
-    background-color: #636dbe;
-}
-
-/* ===================================================
-    Listes de conversations
-   =================================================== */
 .conv-liste {
     flex: 1;
     overflow-y: auto;
-    padding: 10px;
+    padding: 10px 6px 10px 0;
 }
 
 .conv-item {
@@ -147,8 +177,25 @@ body, html {
     font-weight: 600;
     cursor: pointer;
     margin-bottom: 8px;
-    background-color: #2a2f55;
-    transition: background 0.2s;
+    background-color: var(--bg-card);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.conv-item:hover {
+    background-color: var(--bg-panel-hover);
+    transform: translateX(2px);
+}
+
+.conversations.mode-groupe .conv-item:hover {
+    background-color: var(--bg-panel-group-hover);
+}
+
+.conv-item.active {
+    background-color: var(--bg-panel-active);
+}
+
+.conversations.mode-groupe .conv-item.active {
+    background-color: var(--bg-panel-group-active);
 }
 
 .conv-item-label {
@@ -159,29 +206,21 @@ body, html {
 .conv-item-suppr {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.45);
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
     padding: 0 0 0 8px;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
     flex-shrink: 0;
 }
 
 .conv-item-suppr:hover {
-    color: #ff6b6b;
-}
-
-.conv-item:hover {
-    background-color: #3b4280;
-}
-
-.conv-item.active {
-    background-color: #3b5bdb;
+    color: var(--danger);
 }
 
 /* ===================================================
-    Zone de droite (Logo et Message d'accueil)
+    Zone de contenu principal (Chat)
    =================================================== */
 .main-content {
     flex: 1;
@@ -197,60 +236,709 @@ body, html {
     left: 0;
     right: 0;
     padding: 14px 20px;
-    background-color: #232849;
-    border-bottom: 1px solid #3a4070;
-    z-index: 10;
+    background-color: rgba(19, 22, 40, 0.96);
+    border-bottom: 1px solid var(--border-soft);
+    z-index: 20;
+    pointer-events: auto;
 }
 
-.input-nouveau-mp {
+/* ===================================================
+    Gestion des formulaires & Groupes
+   =================================================== */
+.mp-search-section,
+.group-create-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.group-create-section {
+    min-height: calc(100vh - 110px);
+    gap: 28px;
+    padding: 56px 28px 0;
+}
+
+.input-nouveau-mp,
+.input-group-name,
+.input-group-member,
+.group-word-input,
+.chat-saisie {
     width: 100%;
-    background-color: #2a2f55;
-    border: none;
-    border-radius: 30px;
-    padding: 12px 20px;
-    color: white;
+    background-color: var(--bg-surface-soft);
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding: 12px 18px;
+    color: var(--text-main);
     font-size: 14px;
     outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.input-nouveau-mp::placeholder {
+.input-nouveau-mp::placeholder,
+.input-group-name::placeholder,
+.input-group-member::placeholder,
+.group-word-input::placeholder,
+.chat-saisie::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
 
+.input-nouveau-mp:focus,
+.input-group-name:focus,
+.input-group-member:focus,
+.group-word-input:focus,
+.chat-saisie:focus {
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.group-create-header {
+    display: flex;
+    gap: 12px;
+}
+
+.group-search-top {
+    padding-top: 6px;
+}
+
+.group-search-input-shell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(97, 106, 191, 0.92);
+    border-radius: 28px;
+    padding: 0 8px 0 14px;
+    min-height: 64px;
+}
+
+.group-search-input-shell .input-group-member {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 15px;
+    text-transform: uppercase;
+}
+
+.group-search-input-shell .input-group-member::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.group-search-action {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--accent-group);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.group-search-action img {
+    width: 24px;
+    height: 24px;
+}
+
+.group-selected-members,
+.group-members-list,
+.group-words-list,
+.group-kick-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.selected-member-chip,
+.group-member-item,
+.group-word-item,
+.group-kick-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-surface-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 8px 12px;
+    color: var(--text-main);
+    font-size: 13px;
+}
+
+.selected-member-chip {
+    cursor: pointer;
+    border-radius: 999px;
+}
+
+.create-group-btn,
+.chat-header-action,
+.group-secondary-action,
+.group-danger-action,
+.group-word-add-btn,
+.group-result-add,
+.group-word-remove,
+.group-kick-btn {
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.create-group-btn,
+.chat-header-action,
+.group-word-add-btn,
+.group-result-add,
+.group-word-remove,
+.group-kick-btn {
+    background-color: var(--accent-mp);
+    color: var(--bg-main);
+    padding: 10px 16px;
+}
+
+body.mode-groupe-active .create-group-btn,
+body.mode-groupe-active .chat-header-action,
+body.mode-groupe-active .group-word-add-btn,
+body.mode-groupe-active .group-result-add,
+body.mode-groupe-active .group-word-remove,
+body.mode-groupe-active .group-kick-btn {
+    background-color: var(--accent-group);
+}
+
+.create-group-btn:hover,
+.chat-header-action:hover,
+.group-secondary-action:hover,
+.group-danger-action:hover,
+.group-word-add-btn:hover,
+.group-result-add:hover,
+.group-word-remove:hover,
+.group-kick-btn:hover {
+    transform: translateY(-1px);
+}
+
 /* ===================================================
-    Resultats de recherche
+    Résultats de recherche
    =================================================== */
-.search-results {
-    position: absolute;
-    top: 60px;
-    left: 20px;
-    right: 20px;
-    background-color: #2a2f55;
-    border-radius: 0 0 12px 12px;
-    overflow: hidden;
-    z-index: 10;
+.search-results,
+.group-search-results {
     display: none;
+    position: relative;
+    z-index: 24;
+    background: transparent;
+    border-radius: 18px;
+    overflow: visible;
+    border: none;
+    pointer-events: auto;
+}
+
+.search-result-item,
+.group-result-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--text-main);
+    font-size: 14px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    position: relative;
+    z-index: 25;
+    pointer-events: auto;
 }
 
 .search-result-item {
-    padding: 12px 20px;
-    color: white;
-    font-size: 14px;
     cursor: pointer;
-    transition: background 0.2s;
+    appearance: none;
 }
 
-.search-result-item:hover {
-    background-color: #3b4280;
+.search-result-item:hover,
+.group-result-item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.group-search-results {
+    display: none;
+    gap: 14px;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.group-result-item {
+    min-height: 56px;
+    border-radius: 22px;
+    background-color: var(--accent-group);
+    color: var(--text-main);
+    padding: 0 14px 0 18px;
+    box-shadow: 0 8px 0 rgba(42, 47, 85, 0.75);
+}
+
+.group-result-item:hover {
+    background-color: #7fd0ef;
+}
+
+.group-result-item span {
+    font-size: 17px;
+    text-transform: uppercase;
+}
+
+.group-result-add {
+    position: relative;
+    z-index: 26;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    color: transparent;
+    font-size: 0;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.group-result-add::before {
+    content: "+";
+    color: var(--bg-main);
+    font-size: 34px;
+    transform: translateY(-1px);
+}
+
+.group-result-add:hover {
+    transform: none;
+}
+
+.group-result-add span {
+    display: none;
+}
+
+.group-builder-card {
+    margin-top: auto;
+    padding: 34px 38px 24px;
+    border-radius: 34px 34px 0 0;
+    background-color: rgba(97, 106, 191, 0.96);
+    box-shadow: 0 -10px 24px rgba(12, 14, 28, 0.16);
+}
+
+.group-builder-label {
+    margin: 0 0 8px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.group-builder-card .input-group-name {
+    min-height: 58px;
+    margin-bottom: 18px;
+    border-radius: 24px;
+    background-color: #2f345f;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.group-builder-card .group-selected-members {
+    min-height: 168px;
+    padding: 16px;
+    border-radius: 22px;
+    background-color: #2f345f;
+    align-content: flex-start;
+}
+
+.group-builder-card .selected-member-chip {
+    min-width: 200px;
+    justify-content: center;
+    min-height: 48px;
+    border: none;
+    background-color: var(--accent-group);
+    color: var(--text-main);
+    font-size: 17px;
+    text-transform: uppercase;
+    box-shadow: 0 6px 0 rgba(42, 47, 85, 0.82);
+}
+
+.group-builder-card .create-group-btn {
+    width: 100%;
+    margin-top: 24px;
+    min-height: 98px;
+    border-radius: 24px;
+    justify-content: space-between;
+    padding: 18px 28px;
+    background-color: var(--accent-group);
+    color: var(--text-main);
+    font-size: 18px;
+    text-transform: uppercase;
+    box-shadow: 0 10px 0 rgba(42, 47, 85, 0.82);
 }
 
 /* ===================================================
-    Barre d'envoi de message prive
+    Header du Chat & Messages
+   =================================================== */
+.create-group-btn span {
+    display: inline-flex;
+    align-items: center;
+}
+
+.create-group-icon {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.chat-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 24px;
+    background: linear-gradient(180deg, rgba(12, 14, 28, 0.96), rgba(12, 14, 28, 0.66), transparent);
+    z-index: 12;
+}
+
+.chat-header-main {
+    min-width: 0;
+}
+
+.chat-mode-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-soft);
+}
+
+.chat-title {
+    font-size: 28px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.messages {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 72px;
+    padding: 92px 24px 18px 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+body.group-chat-layout .messages {
+    padding-top: 22px;
+}
+
+.messages .moi,
+.messages .autre {
+    max-width: min(68%, 560px);
+    width: fit-content;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-soft);
+}
+
+.messages .moi {
+    align-self: flex-end;
+}
+
+.messages .autre {
+    align-self: flex-start;
+}
+
+.messages .pseudo-label {
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+}
+
+.messages .moi .pseudo-label {
+    background-color: var(--accent-mp-strong);
+}
+
+.messages .autre .pseudo-label {
+    background-color: var(--accent-mp);
+}
+
+body.mode-groupe-active .messages .moi .pseudo-label {
+    background-color: var(--accent-group);
+}
+
+body.mode-groupe-active .messages .autre .pseudo-label {
+    background-color: var(--accent-group-strong);
+    color: var(--bg-main);
+}
+
+.messages .contenu {
+    padding: 12px 14px;
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    background-color: var(--bg-surface-alt);
+    color: white;
+}
+
+.notif {
+    align-self: center;
+    max-width: min(80%, 680px);
+    padding: 10px 14px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.09);
+    color: var(--text-soft);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ===================================================
+    Panneau d'information de groupe
+   =================================================== */
+.group-info-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 92px;
+    width: auto;
+    background-color: rgba(97, 106, 191, 0.98);
+    border: none;
+    border-radius: 0;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.28s ease, opacity 0.2s ease;
+    z-index: 16;
+    opacity: 0;
+}
+
+.group-info-panel.open {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+body.group-panel-open .messages {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.group-info-panel-header,
+.group-info-footer {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.group-info-panel-header {
+    min-height: 36px;
+    background-color: #6ec7eb;
+    border-radius: 0;
+    padding: 0 12px;
+}
+
+.group-panel-title {
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.group-panel-close {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-main);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.group-info-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.group-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.group-info-section h3 {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.group-admin-label,
+.group-empty-state {
+    color: var(--text-soft);
+    font-size: 13px;
+}
+
+.group-admin-summary {
+    gap: 6px;
+}
+
+.group-admin-chip {
+    width: fit-content;
+    min-width: 88px;
+    min-height: 28px;
+    padding: 4px 18px;
+    border-radius: 999px;
+    background-color: #dd827d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.group-members-panel,
+.group-words-panel {
+    background-color: #2f345f;
+    border-radius: 16px;
+    padding: 10px;
+    min-height: 168px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.group-admin-form {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.group-admin-form .group-word-input {
+    min-height: 34px;
+    border-radius: 999px;
+    padding: 0 14px;
+    background-color: #5b63b8;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.group-admin-form .group-word-input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.group-word-add-btn {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #dd827d;
+    color: #2f345f;
+    font-size: 18px;
+}
+
+.group-members-list,
+.group-kick-list,
+.group-words-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-content: start;
+}
+
+.group-member-item,
+.group-word-item,
+.group-kick-item {
+    width: 100%;
+    min-height: 22px;
+    justify-content: center;
+    border-radius: 999px;
+    border: none;
+    padding: 4px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 0 rgba(42, 47, 85, 0.72);
+}
+
+.group-member-item,
+.group-kick-item {
+    background-color: #6ec7eb;
+}
+
+.group-word-item {
+    background-color: #5b63b8;
+}
+
+.group-member-item.empty-slot,
+.group-word-item.empty-slot {
+    background-color: #394071;
+    color: transparent;
+    box-shadow: none;
+}
+
+.group-admin-badge,
+.group-kick-remove,
+.group-word-remove {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border-radius: 50%;
+    border: none;
+    background-color: #dd827d;
+    color: white;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.group-kick-item {
+    justify-content: space-between;
+}
+
+.group-kick-remove:disabled {
+    opacity: 0.75;
+    cursor: default;
+}
+
+.group-kick-btn {
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #dd827d;
+    color: white;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+/* ===================================================
+    Barre de saisie du Chat
    =================================================== */
 .chat-input-bar {
     width: 100%;
-    padding: 10px 20px;
-    background-color: #1a1a2e;
+    padding: 12px 20px 16px 20px;
+    background-color: rgba(15, 17, 33, 0.96);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -260,42 +948,43 @@ body, html {
 .chat-input-wrapper {
     display: flex;
     align-items: center;
-    background-color: #51589d;
+    background-color: var(--bg-surface-alt);
     border-radius: 30px;
-    height: 46px;
-    padding: 0 5px;
+    min-height: 50px;
+    padding: 5px;
+    gap: 8px;
 }
 
 .chat-saisie {
     flex: 1;
     background: transparent;
     border: none;
-    outline: none;
-    color: white;
-    font-size: 14px;
-    padding: 0 50px 0 20px;
+    padding: 0 16px;
 }
 
-.chat-saisie::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.chat-btn-fleche {
-    width: 38px;
-    height: 38px;
-    background-color: #76d18b;
+.chat-btn-fleche,
+.chat-btn-info {
+    width: 40px;
+    height: 40px;
+    background-color: var(--accent-mp);
     border-radius: 50%;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex-shrink: 0;
 }
 
-/* Bouton envoi en mode Groupe → bleu */
-.mode-groupe-active .chat-btn-fleche {
-    background-color: #68bce1;
+body.mode-groupe-active .chat-btn-fleche,
+body.mode-groupe-active .chat-btn-info {
+    background-color: var(--accent-group);
+}
+
+.chat-btn-fleche:hover,
+.chat-btn-info:hover {
+    transform: translateY(-1px);
 }
 
 .chat-btn-fleche img {
@@ -303,9 +992,14 @@ body, html {
     height: auto;
 }
 
-/* ===================================================
-    Zone d'attente
-   =================================================== */
+.chat-btn-info {
+    color: var(--bg-main);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
 .attente {
     position: absolute;
     top: 50%;
@@ -329,64 +1023,60 @@ body, html {
 }
 
 /* ===================================================
-    Zone des messages prives
+    Responsive & Media Queries
    =================================================== */
-.messages {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 60px;
-    padding: 12px 20px 12px 20px;
-    padding-top: 70px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+@media (max-width: 960px) {
+    .conversations {
+        width: 280px;
+        padding: 16px;
+        border-radius: 0;
+    }
+
+    .chat-title {
+        font-size: 22px;
+    }
+
+    .group-info-panel {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+    }
 }
 
-.messages .moi,
-.messages .autre {
-    max-width: 65%;
-    width: fit-content;
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-}
+@media (max-width: 720px) {
+    .pages {
+        flex-direction: column;
+    }
 
-.messages .moi {
-    align-self: flex-end;
-}
+    .conversations {
+        width: 100%;
+        height: 230px;
+        border-bottom-left-radius: 28px;
+        border-bottom-right-radius: 28px;
+    }
 
-.messages .autre {
-    align-self: flex-start;
-}
+    .conv-liste {
+        padding-right: 0;
+    }
 
-.messages .pseudo-label {
-    padding: 4px 12px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: white;
-}
+    .main-content {
+        min-height: 0;
+    }
 
-.messages .moi .pseudo-label {
-    background-color: #4dabf7;
-}
+    .group-create-header,
+    .group-admin-form,
+    .group-info-footer {
+        flex-direction: column;
+    }
 
-.messages .autre .pseudo-label {
-    background-color: #76d18b;
-}
+    .messages .moi,
+    .messages .autre,
+    .notif {
+        max-width: 100%;
+    }
 
-.messages .contenu {
-    padding: 10px 14px;
-    font-size: 14px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
-    background-color: #636dbe;
-    color: white;
+    .group-info-panel {
+        bottom: 84px;
+    }
 }
