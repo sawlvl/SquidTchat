@@ -9,9 +9,3 @@ build*/
 
 # Bloque le push sur github des fichiers de log
 *.log
-
-# Bloque le push sur github des fichiers .env
-.env
-
-# Empêcher de push le dossier admin qui est dans SquidFrontend
-SquidFrontend/admin/

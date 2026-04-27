@@ -71,7 +71,7 @@ Cette etape est indispensable : si Docker Desktop n'est pas lance, la commande d
 Si le projet n'est pas deja present sur la machine, il peut etre clone depuis GitHub avec le terminal.
 
 ```powershell
-git clone https://github.com/m0bley-git/SquidTchat.git
+git clone https://github.com/sawlvl/SquidTchat.git
 cd SquidTchat
 ```
 
